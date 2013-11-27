@@ -59,21 +59,19 @@ public class Case extends JPanel implements MouseListener {
         int nbCasesSelectedBeforeClick = this.nbCasesSelected;
 
         if (!(this.clan != 1 && nbCasesSelectedBeforeClick == 0)) {
-        // Case clicked is the first case that has been selected and no other case is selected : we can deselect it OR
+            // Case clicked is the first case that has been selected and no other case is selected : we can deselect it OR
             // Case clicked is the second case that has been selected : we can deselect it
             if (this.isSelected && this.caseSelected[this.posx][this.posy] == 1 && nbCasesSelectedBeforeClick == 1
-                    || this.isSelected && this.caseSelected[this.posx][this.posy] == 0) {
+                    || this.isSelected && this.caseSelected[this.posx][this.posy] == 2) {
                 this.isSelected = false;
                 this.setBackground(Color.DARK_GRAY);
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
-                        if (this.nbCasesSelected == 1) {
                             Game.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 0;
-                        }
-                        Game.boardGame.grid[i][j].nbCasesSelected--;            // indicate to all cases that one case is deselected
                         if (nbCasesSelectedBeforeClick == 1) {
                             Game.boardGame.grid[i][j].canBeSelected = true;     // if the case we deselect is the only one that was selected, we can select any case 
                         }
+                        Game.boardGame.grid[i][j].nbCasesSelected--;            // indicate to all cases that one case is deselected
                     }
                 }
             } // Case clicked was not selected and can be selected : we can select it
@@ -82,11 +80,14 @@ public class Case extends JPanel implements MouseListener {
                 this.setBackground(Color.LIGHT_GRAY);
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
-                        Game.boardGame.grid[i][j].nbCasesSelected++;         // indicate to all cases that one additional case is selected
                         if (nbCasesSelectedBeforeClick == 0) {
                             Game.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 1;
                             Game.boardGame.grid[i][j].canBeSelected = this.isNeighbourg(i, j);
                         }
+                        if (nbCasesSelectedBeforeClick == 1) {
+                            Game.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 2;
+                        }
+                        Game.boardGame.grid[i][j].nbCasesSelected++;         // indicate to all cases that one additional case is selected
                     }
                 }
                 this.canBeSelected = true;

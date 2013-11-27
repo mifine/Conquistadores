@@ -20,22 +20,18 @@ public class Board extends JPanel {
     public JPanel north = new JPanel();
     int i, j;
 
+    private Case caseOrigin;
+    private Case caseDestination;
+
     public void Board() {
 
         this.board.setLayout(new GridLayout(5, 5));
-     //   this.board.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+        this.populateCenterPanel();
 
-        for (i = 0; i < 5; i++) {
-            for (j = 0; j < 5; j++) {
-                this.grid[i][j] = new Case(i, j);
-                if (i % 2 == j % 2) {
-                    this.grid[i][j].setBackground(Color.DARK_GRAY);
-                } else {
-                    this.grid[i][j].setBackground(Color.DARK_GRAY);
-                }
-                this.board.add(grid[i][j]);
-            }
-        }
+        this.populateNorthPanel();
+
+        this.populateSouthPanel();
+
     }
 
     /*
@@ -67,13 +63,134 @@ public class Board extends JPanel {
 
     /*
      Set Player Color
+     @param Color colorToSet
      */
     public void setPlayerColor(Color colorToSet) {
         this.playerColor = colorToSet;
     }
 
-    public Case getCase(int x, int y) {
-        return this.grid[x][y];
+    /*
+     Populate Board Grids with Cases
+     */
+    public void populateCenterPanel() {
+        for (i = 0; i < 5; i++) {
+            for (j = 0; j < 5; j++) {
+                this.grid[i][j] = new Case(i, j);
+                this.grid[i][j].setBackground(Color.DARK_GRAY);
+                this.grid[i][j].setBackground(Color.DARK_GRAY);
+                this.board.add(grid[i][j]);
+            }
+        }
+    }
+
+    /*
+     Populate North JPanel with Player VS IA
+     */
+    public void populateNorthPanel() {
+        JLabel label = new JLabel("Player VS IA");
+        label.setFont(new Font("Verdana", 1, 20));
+        this.north.add(label);
+    }
+
+    /*
+     Populate South JPanel with ATTACK and SEND TROOPS buttons
+     */
+    public void populateSouthPanel() {
+        JButton buttonAttack = new JButton("ATTACK");
+        JButton buttonSend = new JButton("SEND TROOPS");
+
+        buttonAttack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAttackActionPerformed(evt);
+            }
+        });
+
+        buttonSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSendActionPerformed(evt);
+            }
+        });
+
+        this.south.add(buttonAttack);
+        this.south.add(buttonSend);
+    }
+
+    private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {
+        this.canBeActioned("attack");
+        System.out.println("caseOrigin.clan = " + caseOrigin.clan + " - caseDestination.clan = " + caseDestination.clan);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(caseOrigin.caseSelected[i][j]);
+            }
+            System.out.println("");
+        }
+
+        if (this.canBeActioned("attack")) {
+            System.out.println(caseOrigin.posx + " " + caseOrigin.posy + " ATTACKS " + caseDestination.posx + " " + caseDestination.posy);
+
+        }
+    }
+
+    private void buttonSendActionPerformed(java.awt.event.ActionEvent evt) {
+        this.canBeActioned("send");
+        System.out.println("caseOrigin.clan = " + caseOrigin.clan + " - caseDestination.clan = " + caseDestination.clan);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                System.out.print(caseOrigin.caseSelected[i][j]);
+            }
+            System.out.println("");
+        }
+
+        if (this.canBeActioned("send")) {
+            System.out.println(caseOrigin.posx + " " + caseOrigin.posy + " SENDS TROOPS TO " + caseDestination.posx + " " + caseDestination.posy);
+
+        }
+    }
+
+    private boolean canBeActioned(String action) {
+        boolean canBeActioned = false;
+        Case[] casesPlayed;
+        casesPlayed = this.determineOriginDestination();
+        this.caseOrigin = casesPlayed[0];
+        this.caseDestination = casesPlayed[1];
+        switch (action) {
+            case "attack":
+                if (caseOrigin.clan != caseDestination.clan) {
+                    canBeActioned = true;
+                } else {
+                    canBeActioned = false;
+                }
+                break;
+            case "send":
+                if (caseOrigin.clan == caseDestination.clan) {
+                    canBeActioned = true;
+                } else {
+                    canBeActioned = false;
+                }
+                break;
+            default:
+        }
+        return canBeActioned;
+    }
+
+    /*
+     Returns an Array of Cases, 
+     array[0] = case origine
+     array[1] = case destination
+     */
+    private Case[] determineOriginDestination() {
+        Case[] casesPlayed = new Case[2];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                if (this.grid[0][0].caseSelected[i][j] == 1) {
+                    casesPlayed[0] = this.grid[i][j];
+                }
+                if (this.grid[0][0].caseSelected[i][j] == 2) {
+                    casesPlayed[1] = this.grid[i][j];
+                }
+            }
+        }
+        return casesPlayed;
     }
 
 }

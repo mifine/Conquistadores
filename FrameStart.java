@@ -472,8 +472,8 @@ public class FrameStart extends javax.swing.JFrame {
 
         frameGame.add(this.boardGame.board, BorderLayout.CENTER);
         frameGame.add(this.boardGame.east, BorderLayout.EAST);
-        frameGame.add(this.boardGame.west, BorderLayout.SOUTH);
-        frameGame.add(this.boardGame.south, BorderLayout.WEST);
+        frameGame.add(this.boardGame.west, BorderLayout.WEST);
+        frameGame.add(this.boardGame.south, BorderLayout.SOUTH);
         frameGame.add(this.boardGame.north, BorderLayout.NORTH);
 
         this.boardGame.InitPlacement();
