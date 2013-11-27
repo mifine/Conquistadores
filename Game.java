@@ -16,14 +16,14 @@ public class Game {
 
     public final static int HT = 400;
     public final static int LG = 600;
-    static Board boardGame = new Board();
-
+    static GamePanel boardGame = new GamePanel();
+    static Frame F = new FrameStart(boardGame);
     public static void main(String[] arg) {
         new Game();
     }
 
     public Game() {
-        Frame F = new FrameStart(boardGame);
+        
         F.setTitle("Conquistadors");
         F.setSize(LG, HT);
         F.setLocationRelativeTo(null);
