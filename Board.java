@@ -1,69 +1,79 @@
+
 /**
  *
  * @author mifine
  */
 import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
 import java.awt.Color;
 import javax.swing.*;
-import java.applet.*;
 
-public class Board extends Canvas {
+public class Board extends JPanel {
 
-    public Token grille[][] = new Token[5][5];
-    Panel board = new Panel();
-    Panel east = new Panel();
-    Panel west = new Panel();
-    Panel south = new Panel();
-    Panel north = new Panel();
+    public Case grid[][] = new Case[5][5];
+    public JPanel board = new JPanel();
+    public Color playerColor;
+    public int[] selectedCase = new int[2];
+
+    public JPanel east = new JPanel();
+    public JPanel west = new JPanel();
+    public JPanel south = new JPanel();
+    public JPanel north = new JPanel();
     int i, j;
 
     public void Board() {
 
-        board.setLayout(new GridLayout(5, 5));
+        this.board.setLayout(new GridLayout(5, 5));
+     //   this.board.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+
         for (i = 0; i < 5; i++) {
             for (j = 0; j < 5; j++) {
-                grille[i][j] = new Token(i, j);
-                board.add(grille[i][j]);
+                this.grid[i][j] = new Case(i, j);
+                if (i % 2 == j % 2) {
+                    this.grid[i][j].setBackground(Color.DARK_GRAY);
+                } else {
+                    this.grid[i][j].setBackground(Color.DARK_GRAY);
+                }
+                this.board.add(grid[i][j]);
             }
         }
     }
 
-/*
-    Initialize the token placement at the begining of a new Game. 
-    10 Player 1, 
-    5 Indigeneous
-    10 Player 2
-    */ 	 
-
+    /*
+     Initialize the token placement at the begining of a new Game. 
+     clan = 1 : 10 Player 1, 
+     clan = 0 : 5 Indigeneous
+     clan = 2 : 10 Player 2
+     */
     public void InitPlacement() {
 
-        boolean pairLigne = true;
-        for (i = 0; i < 4; i++) {
-            boolean pairColonne = true;
-            for (j = 0; j < 10; j++) {
-                if ((pairLigne && (!pairColonne)) || ((!pairLigne) && pairColonne)) {
-                    grille[i][j].pion = -1;
+        for (i = 0; i < 5; i++) {
+            for (j = 0; j < 5; j++) {
+                if (j < 2) {
+                    this.grid[i][j].setClan(1);
+                    this.grid[i][j].setClanColor(this.playerColor);
                 }
-                grille[i][j].repaint();
-                pairColonne = !pairColonne;
-            }
-            pairLigne = !pairLigne;
-        }
-        //boucle pour avoir les pions rouges: 
-        boolean pairLigneProuge = true;
-        for (i = 6; i < 10; i++) {
-            boolean pairColonneProuge = true;
-            for (j = 0; j < 10; j++) {
-                if ((pairLigneProuge && !pairColonneProuge) || ((!pairLigneProuge) && (pairColonneProuge))) {
-                    grille[i][j].pion = 1;
+                if (j == 2) {
+                    this.grid[i][j].setClan(0);
+                    this.grid[i][j].setClanColor(new Color(218, 165, 32));
                 }
-                grille[i][j].repaint();
-                pairColonneProuge = !pairColonneProuge;
+                if (j > 2) {
+                    this.grid[i][j].setClan(2);
+                    this.grid[i][j].setClanColor(new Color(255, 51, 51));
+                }
+                this.grid[i][j].repaint();
             }
-            pairLigneProuge = !pairLigneProuge;
         }
+    }
+
+    /*
+     Set Player Color
+     */
+    public void setPlayerColor(Color colorToSet) {
+        this.playerColor = colorToSet;
+    }
+
+    public Case getCase(int x, int y) {
+        return this.grid[x][y];
     }
 
 }
