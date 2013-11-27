@@ -68,11 +68,11 @@ public class Case extends JPanel implements MouseListener {
                 this.setBackground(Color.DARK_GRAY);
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
-                        Game.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 0;
+                        FrameStart.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 0;
                         if (nbCasesSelectedBeforeClick == 1) {
-                            Game.boardGame.grid[i][j].canBeSelected = true;     // if the case we deselect is the only one that was selected, we can select any case 
+                            FrameStart.boardGame.grid[i][j].canBeSelected = true;     // if the case we deselect is the only one that was selected, we can select any case 
                         }
-                        Game.boardGame.grid[i][j].nbCasesSelected--;            // indicate to all cases that one case is deselected
+                        FrameStart.boardGame.grid[i][j].nbCasesSelected--;            // indicate to all cases that one case is deselected
                     }
                 }
             } // Case clicked was not selected and can be selected : we can select it
@@ -82,13 +82,13 @@ public class Case extends JPanel implements MouseListener {
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
                         if (nbCasesSelectedBeforeClick == 0) {
-                            Game.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 1;
-                            Game.boardGame.grid[i][j].canBeSelected = this.isNeighbourg(i, j);
+                            FrameStart.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 1;
+                            FrameStart.boardGame.grid[i][j].canBeSelected = this.isNeighbourg(i, j);
                         }
                         if (nbCasesSelectedBeforeClick == 1) {
-                            Game.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 2;
+                            FrameStart.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 2;
                         }
-                        Game.boardGame.grid[i][j].nbCasesSelected++;         // indicate to all cases that one additional case is selected
+                        FrameStart.boardGame.grid[i][j].nbCasesSelected++;         // indicate to all cases that one additional case is selected
                     }
                 }
                 this.canBeSelected = true;

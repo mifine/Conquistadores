@@ -341,11 +341,11 @@ public class GamePanel extends JPanel {
             @Override
             public void windowClosing(WindowEvent e) {
                 alert.dispose();
-                if (Game.boardGame.turnNumber > Game.boardGame.maxTurnNumber) {
+                if (FrameStart.boardGame.turnNumber > FrameStart.boardGame.maxTurnNumber) {
                     try {
                         Thread.sleep(500);
-                        Game.boardGame.finalScore = Game.boardGame.countScores();
-                        Game.boardGame.showFinalScore();
+                        FrameStart.boardGame.finalScore = FrameStart.boardGame.countScores();
+                        FrameStart.boardGame.showFinalScore();
                     } catch (InterruptedException exep) {
                         Thread.currentThread().interrupt();
                     }
@@ -411,7 +411,15 @@ public class GamePanel extends JPanel {
                 FrameStart.frameGame.dispose();
             }
         });
+        
+        try {
+            FrameStart.boardGame.finalize(); 
+                    } catch (InterruptedException exep) {
+                        Thread.currentThread().interrupt();
+                    }
+        
         alert.show();
+        
     }
 
 }

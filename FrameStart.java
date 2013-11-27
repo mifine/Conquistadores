@@ -12,13 +12,12 @@ public class FrameStart extends javax.swing.JFrame {
 
     private final String[] config = new String[2];
     public Color playerColor;
-    public GamePanel boardGame = new GamePanel();
+    static GamePanel boardGame;
 
     /**
      * Creates new form NewJFrame
      */
-    public FrameStart(GamePanel boardCreated) {
-        this.boardGame = boardCreated;
+    public FrameStart() {
         this.playerColor = new Color(102, 102, 255);                                // This is the default color: blue
         initComponents();
     }
@@ -414,7 +413,7 @@ public class FrameStart extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
     static final Frame frameGame = new Frame();
-            
+
     private void changePlayerColor(String color) {
         if (color != "blue") {
             this.jCheckBoxBlue.setSelected(false);
@@ -455,6 +454,8 @@ public class FrameStart extends javax.swing.JFrame {
     }
 
     private void launchNewGame() {
+
+        this.boardGame = new GamePanel();
         frameGame.setTitle("Conquistadors");
         frameGame.setSize(700, 500);
         frameGame.setLocationRelativeTo(null);
@@ -474,10 +475,10 @@ public class FrameStart extends javax.swing.JFrame {
         frameGame.add(this.boardGame.west, BorderLayout.WEST);
         frameGame.add(this.boardGame.south, BorderLayout.SOUTH);
         frameGame.add(this.boardGame.north, BorderLayout.NORTH);
-
-        frameGame.show();
-                
         this.boardGame.InitPlacement();
+        
+        frameGame.show();
+
     }
 
 }
