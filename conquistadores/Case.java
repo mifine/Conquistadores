@@ -1,3 +1,4 @@
+package conquistadores;
 
 /**
  *
@@ -12,15 +13,13 @@ import javax.swing.*;
 
 public class Case extends JPanel implements MouseListener {
 
-    int posx, posy;
-    public int clan;
-    public Color initialColor;
-    public Color clanColor;
-    public int troopsNumber;
-    boolean isSelected;
-    boolean canBeSelected;
-    int nbCasesSelected;
-    int[][] caseSelected = new int[5][5];
+    private int posx, posy;
+    private int nbCasesSelected;
+    private int clan;
+    private int troopsNumber;
+    private Color initialColor, clanColor;
+    private boolean isSelected, canBeSelected;
+    public int[][] caseSelected = new int[5][5];
 
     public Case(int x, int y) {
         super();
@@ -149,6 +148,10 @@ public class Case extends JPanel implements MouseListener {
     public void setClanColor(Color colorId) {
         this.clanColor = colorId;
     }
+    
+    public Color getClanColor() {
+        return this.clanColor;
+    }
 
     public void setClan(int clanId) {
         this.clan = clanId;
@@ -163,11 +166,40 @@ public class Case extends JPanel implements MouseListener {
         return this.clan;
     }
 
+    public void setTroopsNumber(int nb) {
+        this.troopsNumber = nb;
+    }
+
+    public int getTroopsNumber() {
+        return this.troopsNumber;
+    }
+
+    public void setIsSelected(boolean bool) {
+        this.isSelected = bool;
+    }
+    
     public boolean getIsSelected() {
         return this.isSelected;
     }
     
-    public void initialize(){
+    public void setCanBeSelected(boolean bool) {
+        this.canBeSelected = bool;
+    }
+    
+        public boolean getCanBeSelected() {
+        return this.canBeSelected;
+    }
+        
+        public void setNbCasesSelected(int nb){
+            this.nbCasesSelected = nb;
+        }
+    
+    // END GET - SET
+
+    /*
+     Initialize a Case with default values.
+     */
+    public void initialize() {
         this.isSelected = false;
         this.canBeSelected = true;
         this.nbCasesSelected = 0;

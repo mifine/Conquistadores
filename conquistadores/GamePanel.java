@@ -1,3 +1,4 @@
+package conquistadores;
 
 /**
  *
@@ -17,17 +18,13 @@ public class GamePanel extends JPanel {
     public int[] selectedCase = new int[2];
     public int turnNumber = 1;
     public int actionNumber = 1;
-    static int maxTurnNumber = 3;
-    static int maxActionsPerTurn = 3;
-    static int maxTroopsPerCase = 13;
     public int[] finalScore = new int[3];
-
     public JPanel east = new JPanel();
     public JPanel west = new JPanel();
     public JPanel south = new JPanel();
     public JPanel north = new JPanel();
-    int i, j;
-
+    
+    private int i, j;
     private Case caseOrigin;
     private Case caseDestination;
 
@@ -160,14 +157,14 @@ public class GamePanel extends JPanel {
         this.caseDestination = casesPlayed[1];
         switch (action) {
             case "attack":
-                if (caseOrigin.clan != caseDestination.clan) {
+                if (caseOrigin.getClan() != caseDestination.getClan()) {
                     canBeActioned = true;
                 } else {
                     canBeActioned = false;
                 }
                 break;
             case "send":
-                if (caseOrigin.clan == caseDestination.clan) {
+                if (caseOrigin.getClan() == caseDestination.getClan()) {
                     canBeActioned = true;
                 } else {
                     canBeActioned = false;
@@ -189,10 +186,10 @@ public class GamePanel extends JPanel {
         this.caseDestination.repaint();
         this.actionNumber++;
 
-        if (this.actionNumber > this.maxActionsPerTurn) {
+        if (this.actionNumber > Game.MAX_ACTIONS_PER_TURN) {
             try {
                 Thread.sleep(500);
-                if (this.turnNumber < this.maxTurnNumber) {
+                if (this.turnNumber < Game.MAX_TURN_NUMBER) {
                     this.sendAlert(" Turn" + this.turnNumber + " is finished. ", 130, 90);
                 }
                 this.turnNumber++;
@@ -203,7 +200,7 @@ public class GamePanel extends JPanel {
 
         }
 
-        if (this.turnNumber > this.maxTurnNumber) {
+        if (this.turnNumber > Game.MAX_TURN_NUMBER) {
             try {
                 Thread.sleep(500);
                 this.sendAlert(" The game is finished. ", 150, 90);
@@ -256,8 +253,8 @@ public class GamePanel extends JPanel {
 
         for (i = 0; i < 5; i++) {
             for (j = 0; j < 5; j++) {
-                this.grid[i][j].nbCasesSelected = 0;
-                this.grid[i][j].canBeSelected = true;
+                this.grid[i][j].setNbCasesSelected(0);
+                this.grid[i][j].setCanBeSelected(true);
                 for (int k = 0; k < 5; k++) {
                     for (int l = 0; l < 5; l++) {
                         this.grid[i][j].caseSelected[k][l] = 0;
@@ -275,23 +272,23 @@ public class GamePanel extends JPanel {
      */
     private boolean resolveAttack() {
         boolean attack;
-        int attackTroops = this.caseOrigin.troopsNumber - 1;
+        int attackTroops = this.caseOrigin.getTroopsNumber() - 1;
         if (attackTroops > 0) {
-            int defendTroops = this.caseDestination.troopsNumber;
+            int defendTroops = this.caseDestination.getTroopsNumber();
             int attackLvl = attackTroops + this.alea();
             int defendLvl = defendTroops + this.alea();
             int diff = attackLvl - defendLvl;
             if (diff > 0) {
-                this.caseOrigin.troopsNumber = 1;
-                this.caseDestination.setClan(this.caseOrigin.clan);
-                this.caseDestination.setClanColor(this.caseOrigin.clanColor);
-                this.caseDestination.troopsNumber = diff;
+                this.caseOrigin.setTroopsNumber(1);
+                this.caseDestination.setClan(this.caseOrigin.getClan());
+                this.caseDestination.setClanColor(this.caseOrigin.getClanColor());
+                this.caseDestination.setTroopsNumber(diff);
             } else if (diff == 0) {
-                this.caseOrigin.troopsNumber = 1;
-                this.caseDestination.troopsNumber = Math.max(1, defendTroops - attackTroops);
+                this.caseOrigin.setTroopsNumber(1);
+                this.caseDestination.setTroopsNumber(Math.max(1, defendTroops - attackTroops));
             } else {
-                this.caseOrigin.troopsNumber = 1;
-                this.caseDestination.troopsNumber = Math.min(defendTroops, Math.abs(diff));
+                this.caseOrigin.setTroopsNumber(1);
+                this.caseDestination.setTroopsNumber(Math.min(defendTroops, Math.abs(diff)));
             }
             attack = true;
         } else {
@@ -308,16 +305,17 @@ public class GamePanel extends JPanel {
      */
     private boolean resolveSendTroops() {
         boolean sendTroops;
-        int destinationTroops = this.caseDestination.troopsNumber;
-        int troopsSent = this.caseOrigin.troopsNumber - 1;
+        int destinationTroops = this.caseDestination.getTroopsNumber();
+        int originTroops = this.caseOrigin.getTroopsNumber();
+        int troopsSent = originTroops - 1;
 
         if (troopsSent > 0 && destinationTroops < 12) {
-            if (troopsSent + destinationTroops <= this.maxTroopsPerCase) {
-                this.caseOrigin.troopsNumber -= troopsSent;
-                this.caseDestination.troopsNumber += troopsSent;
+            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE) {
+                this.caseOrigin.setTroopsNumber(originTroops - troopsSent);
+                this.caseDestination.setTroopsNumber(destinationTroops + troopsSent);
             } else {
-                this.caseOrigin.troopsNumber -= this.maxTroopsPerCase - destinationTroops;
-                this.caseDestination.troopsNumber = this.maxTroopsPerCase;
+                this.caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE - destinationTroops);
+                this.caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE);
             }
             sendTroops = true;
         } else {
@@ -341,7 +339,7 @@ public class GamePanel extends JPanel {
             @Override
             public void windowClosing(WindowEvent e) {
                 alert.dispose();
-                if (FrameStart.boardGame.turnNumber > FrameStart.boardGame.maxTurnNumber) {
+                if (FrameStart.boardGame.turnNumber > Game.MAX_TURN_NUMBER) {
                     try {
                         Thread.sleep(500);
                         FrameStart.boardGame.finalScore = FrameStart.boardGame.countScores();
@@ -383,7 +381,7 @@ public class GamePanel extends JPanel {
         scores[2] = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                scores[this.grid[i][j].clan] += (10 + this.grid[i][j].troopsNumber);
+                scores[this.grid[i][j].getClan()] += (10 + this.grid[i][j].getTroopsNumber());
             }
         }
         return scores;
@@ -412,11 +410,11 @@ public class GamePanel extends JPanel {
             }
         });
         
-        try {
-            FrameStart.boardGame.finalize(); 
-                    } catch (InterruptedException exep) {
-                        Thread.currentThread().interrupt();
-                    }
+//        try {
+//            FrameStart.boardGame.finalize(); 
+//                    } catch (InterruptedException exep) {
+//                        Thread.currentThread().interrupt();
+//                    }
         
         alert.show();
         

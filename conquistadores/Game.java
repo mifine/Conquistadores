@@ -1,22 +1,22 @@
+package conquistadores;
 
 /**
  *
  * @author mifine
  */
 import java.awt.*;
-import java.io.*;
-import java.awt.event.*;
 import java.awt.Color;
-import javax.swing.*;
-import java.applet.*;
 import java.awt.Panel.*;
 import java.awt.event.ActionListener.*;
 
 public class Game {
 
-    public final static int HT = 400;
-    public final static int LG = 600;
     static Frame F = new FrameStart();
+            
+    //declare game constants as final static
+    final static int MAX_TURN_NUMBER = 3;
+    final static int MAX_ACTIONS_PER_TURN = 3;
+    final static int MAX_TROOPS_PER_CASE = 13;
     
     public static void main(String[] arg) {
         new Game();
@@ -25,7 +25,7 @@ public class Game {
     public Game() {
         
         F.setTitle("Conquistadors");
-        F.setSize(LG, HT);
+        F.setSize(600, 400);
         F.setLocationRelativeTo(null);
         F.setBackground(Color.lightGray);
         F.setLayout(new BorderLayout());
