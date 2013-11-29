@@ -12,30 +12,22 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel {
 
-    public Case grid[][] = new Case[5][5];
-    public JPanel board = new JPanel();
-    public Color playerColor;
-    public int[] selectedCase = new int[2];
-    public int turnNumber = 1;
-    public int actionNumber = 1;
+    public static Color playerColor;
+
     public int[] finalScore = new int[3];
-    public JPanel east = new JPanel();
-    public JPanel west = new JPanel();
+    public int[] selectedCase = new int[2];
+
+    public JPanel board = new JPanel();
     public JPanel south = new JPanel();
     public JPanel north = new JPanel();
-    
+    public Case grid[][] = new Case[5][5];
+
     private int i, j;
-    private Case caseOrigin;
-    private Case caseDestination;
+    public Case caseOrigin;
+    public Case caseDestination;
 
-    public void Board() {
+    public GamePanel() {
         this.board.setLayout(new GridLayout(5, 5));
-        this.populateCenterPanel();
-        this.populateNorthPanel();
-        this.populateSouthPanel();
-        this.west.setLayout(new GridLayout(5, 3));
-        this.populateWestPanel();
-
     }
 
     /*
@@ -44,8 +36,13 @@ public class GamePanel extends JPanel {
      clan = 0 : 5 Indigeneous
      clan = 2 : 10 Player 2
      */
-    public void InitPlacement() {
+    public void InitGamePanel() {
 
+        this.populateCenterPanel();
+        this.populateNorthPanel();
+        this.populateSouthPanel();
+
+        // Build the first grid to play
         for (i = 0; i < 5; i++) {
             for (j = 0; j < 5; j++) {
                 if (j < 2) {
@@ -63,8 +60,6 @@ public class GamePanel extends JPanel {
                 this.grid[i][j].repaint();
             }
         }
-
-        //   this.startGame();
     }
 
     /*
@@ -90,12 +85,25 @@ public class GamePanel extends JPanel {
     }
 
     /*
-     Populate North JPanel with Player VS IA
+     Populate North JPanel with Turn number - Player or Enemy Turn
      */
     public void populateNorthPanel() {
-        JLabel label = new JLabel("Player VS IA");
-        label.setFont(new Font("Verdana", 1, 20));
-        this.north.add(label);
+        String whoPlays = FrameStart.gameMecanics.getWhoPlaysFirst();
+        JLabel turnLabel = new JLabel("Turn 1 - " + whoPlays + "'s turn");
+        turnLabel.setFont(new Font("Verdana", 1, 20));
+        this.north.add(turnLabel);
+    }
+
+    /*
+     Update North JPanel with new Turn number - Player or Enemy Turn
+     */
+    public void updateNorthPanel(int turnNb, String whoPlays) {
+        this.north.remove(this.north.getComponent(0));
+        this.north.revalidate();
+        this.north.repaint();
+        JLabel turnLabel = new JLabel("Turn " + turnNb + " - " + whoPlays + "'s turn");
+        turnLabel.setFont(new Font("Verdana", 1, 20));
+        this.north.add(turnLabel);
     }
 
     /*
@@ -127,8 +135,8 @@ public class GamePanel extends JPanel {
     private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned("attack")) {
             //    System.out.println(caseOrigin.posx + " " + caseOrigin.posy + " ATTACKS " + caseDestination.posx + " " + caseDestination.posy);
-            if (this.resolveAttack()) {
-                this.closeActionTurn();
+            if (FrameStart.gameMecanics.resolveAttack()) {
+                FrameStart.gameMecanics.closeActionTurn();
             }
         }
 
@@ -140,8 +148,8 @@ public class GamePanel extends JPanel {
     private void buttonSendActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned("send")) {
             //    System.out.println(caseOrigin.posx + " " + caseOrigin.posy + " SENDS TROOPS TO " + caseDestination.posx + " " + caseDestination.posy);
-            if (this.resolveSendTroops()) {
-                this.closeActionTurn();
+            if (FrameStart.gameMecanics.resolveSendTroops()) {
+                FrameStart.gameMecanics.closeActionTurn();
             }
         }
     }
@@ -149,7 +157,7 @@ public class GamePanel extends JPanel {
     /*
      * South JPanel Check if a button action can be performed
      */
-    private boolean canBeActioned(String action) {
+    public boolean canBeActioned(String action) {
         boolean canBeActioned = false;
         Case[] casesPlayed;
         casesPlayed = this.determineOriginDestination();
@@ -157,14 +165,14 @@ public class GamePanel extends JPanel {
         this.caseDestination = casesPlayed[1];
         switch (action) {
             case "attack":
-                if (caseOrigin.getClan() != caseDestination.getClan()) {
+                if (this.caseOrigin.getClan() != this.caseDestination.getClan()) {
                     canBeActioned = true;
                 } else {
                     canBeActioned = false;
                 }
                 break;
             case "send":
-                if (caseOrigin.getClan() == caseDestination.getClan()) {
+                if (this.caseOrigin.getClan() == this.caseDestination.getClan()) {
                     canBeActioned = true;
                 } else {
                     canBeActioned = false;
@@ -176,49 +184,13 @@ public class GamePanel extends JPanel {
     }
 
     /*
-     * Close an action turn
-     */
-    private void closeActionTurn() {
-        this.caseOrigin.initialize();
-        this.caseDestination.initialize();
-        this.resetAllCases();
-        this.caseOrigin.repaint();
-        this.caseDestination.repaint();
-        this.actionNumber++;
-
-        if (this.actionNumber > Game.MAX_ACTIONS_PER_TURN) {
-            try {
-                Thread.sleep(500);
-                if (this.turnNumber < Game.MAX_TURN_NUMBER) {
-                    this.sendAlert(" Turn" + this.turnNumber + " is finished. ", 130, 90);
-                }
-                this.turnNumber++;
-                this.actionNumber = 1;
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-
-        }
-
-        if (this.turnNumber > Game.MAX_TURN_NUMBER) {
-            try {
-                Thread.sleep(500);
-                this.sendAlert(" The game is finished. ", 150, 90);
-
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
-    /*
      * Determine the cases origin and destination for a player action
      *
      * Returns an Array of Cases, 
      * array[0] = case origine
      * array[1] = case destination
      */
-    private Case[] determineOriginDestination() {
+    public Case[] determineOriginDestination() {
         Case[] casesPlayed = new Case[2];
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
@@ -234,20 +206,7 @@ public class GamePanel extends JPanel {
     }
 
     /*
-     * Populate West JPanel with Turn number, Player Points, Enemy Points
-     */
-    public void populateWestPanel() {
-//        JLabel turnLabel = new JLabel("Turn");
-//        JLabel turnNumberLabel = new JLabel("" + this.turnNumber);
-//        turnLabel.setFont(new Font("Verdana", 1, 20));
-//        turnNumberLabel.setFont(new Font("Verdana", 1, 20));
-//
-//        this.west.add(turnLabel);
-//        this.west.add(turnNumberLabel);
-    }
-
-    /*
-     * Start Game method after BoardPanel is Initiated
+     * Reset all Cases after an action.
      */
     public void resetAllCases() {
 
@@ -266,69 +225,9 @@ public class GamePanel extends JPanel {
 
 
     /*
-     * Resolve an Attack  
-     * returns true if the attack was possible and has been done
-     * return false if the attach was not possible
-     */
-    private boolean resolveAttack() {
-        boolean attack;
-        int attackTroops = this.caseOrigin.getTroopsNumber() - 1;
-        if (attackTroops > 0) {
-            int defendTroops = this.caseDestination.getTroopsNumber();
-            int attackLvl = attackTroops + this.alea();
-            int defendLvl = defendTroops + this.alea();
-            int diff = attackLvl - defendLvl;
-            if (diff > 0) {
-                this.caseOrigin.setTroopsNumber(1);
-                this.caseDestination.setClan(this.caseOrigin.getClan());
-                this.caseDestination.setClanColor(this.caseOrigin.getClanColor());
-                this.caseDestination.setTroopsNumber(diff);
-            } else if (diff == 0) {
-                this.caseOrigin.setTroopsNumber(1);
-                this.caseDestination.setTroopsNumber(Math.max(1, defendTroops - attackTroops));
-            } else {
-                this.caseOrigin.setTroopsNumber(1);
-                this.caseDestination.setTroopsNumber(Math.min(defendTroops, Math.abs(diff)));
-            }
-            attack = true;
-        } else {
-            this.sendAlert("You do not have enough troops to send an attack. Please do another action.", 350, 90);
-            attack = false;
-        }
-        return attack;
-    }
-
-    /*
-     * Resolve a troop support move
-     * returns true if the sendTroops was possible and has been done
-     * return false if the sendTroops was not possible
-     */
-    private boolean resolveSendTroops() {
-        boolean sendTroops;
-        int destinationTroops = this.caseDestination.getTroopsNumber();
-        int originTroops = this.caseOrigin.getTroopsNumber();
-        int troopsSent = originTroops - 1;
-
-        if (troopsSent > 0 && destinationTroops < 12) {
-            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE) {
-                this.caseOrigin.setTroopsNumber(originTroops - troopsSent);
-                this.caseDestination.setTroopsNumber(destinationTroops + troopsSent);
-            } else {
-                this.caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE - destinationTroops);
-                this.caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE);
-            }
-            sendTroops = true;
-        } else {
-            this.sendAlert("You can not perform this action. Please do another action.", 400, 90);
-            sendTroops = false;
-        }
-        return sendTroops;
-    }
-
-    /*
      * Send a message alert to the player if an action can not be performed due to a lack of troops, ...
      */
-    private void sendAlert(String message, int xsize, int ysize) {
+    public void sendAlert(String message, int xsize, int ysize) {
         final Frame alert = new Frame();
         JLabel alertLabel = new JLabel(message);
         alert.setTitle("Conquistadors");
@@ -339,61 +238,29 @@ public class GamePanel extends JPanel {
             @Override
             public void windowClosing(WindowEvent e) {
                 alert.dispose();
-                if (FrameStart.boardGame.turnNumber > Game.MAX_TURN_NUMBER) {
-                    try {
-                        Thread.sleep(500);
-                        FrameStart.boardGame.finalScore = FrameStart.boardGame.countScores();
-                        FrameStart.boardGame.showFinalScore();
-                    } catch (InterruptedException exep) {
-                        Thread.currentThread().interrupt();
-                    }
-                }
             }
         });
+
         alert.show();
     }
-
     /*
-     * Determine the alea that is added to the ATT or DEF level during an attack
+     * Close an action turn
      */
-    private int alea() {
-        int alea = 0;
-        Double rand = Math.random();
-        if (rand < 0.5) {
-            alea = 1;
-        } else if (rand >= 0.5 && rand < 0.8) {
-            alea = 2;
-        } else if (rand >= 0.8 && rand < 0.95) {
-            alea = 3;
-        } else {
-            alea = 4;
-        }
-        return alea;
-    }
 
-    /*
-     * CountScores
-     */
-    public int[] countScores() {
-        int[] scores = new int[3];
-        scores[0] = 0;
-        scores[1] = 0;
-        scores[2] = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                scores[this.grid[i][j].getClan()] += (10 + this.grid[i][j].getTroopsNumber());
-            }
-        }
-        return scores;
+    public void closeActionTurn() {
+        this.caseOrigin.initialize();
+        this.caseDestination.initialize();
+        this.resetAllCases();
+        this.caseOrigin.repaint();
+        this.caseDestination.repaint();
     }
-
 
     /*
      * Send a message alert to the player if an action can not be performed due to a lack of troops, ...
      */
-    private void showFinalScore() {
+    public void showFinalScore() {
         final Frame alert = new Frame();
-        JLabel playerScoreLabel = new JLabel("Scores: Player = " + this.finalScore[1] + " / Enemy = " + this.finalScore[2]);
+        JLabel playerScoreLabel = new JLabel("Scores: Player 1 = " + this.finalScore[1] + " / Player 2 = " + this.finalScore[2]);
         // JLabel enemyScoreLabel = new JLabel("Enemy score = " + this.finalScore[2]);
         // JLabel nativeScoreLabel = new JLabel("Enemy score = " + this.finalScore[0]);
         alert.setTitle("Conquistadors");
@@ -409,15 +276,22 @@ public class GamePanel extends JPanel {
                 FrameStart.frameGame.dispose();
             }
         });
-        
+
 //        try {
-//            FrameStart.boardGame.finalize(); 
+//            this.finalize(); 
 //                    } catch (InterruptedException exep) {
 //                        Thread.currentThread().interrupt();
 //                    }
-        
         alert.show();
-        
+
     }
 
+    // GET, SET
+    public Case getCaseOrigin() {
+        return this.caseOrigin;
+    }
+
+    public Case getCaseDestination() {
+        return this.caseDestination;
+    }
 }

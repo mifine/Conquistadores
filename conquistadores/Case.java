@@ -32,7 +32,7 @@ public class Case extends JPanel implements MouseListener {
     public void paint(Graphics g) {
         super.paint(g);
         int xnb, ynb = 52;
-        int x = 2, y = 2, width = 128, height = 74, arcWidth = 10, ArcHeight = 10;
+        int x = 2, y = 2, width = 132, height = 74, arcWidth = 10, ArcHeight = 10;
         g.setColor(this.clanColor);
         g.fillRoundRect(x, y, width, height, arcWidth, ArcHeight);
         g.setColor(this.clanColor.darker().darker());
@@ -58,7 +58,7 @@ public class Case extends JPanel implements MouseListener {
 
         int nbCasesSelectedBeforeClick = this.nbCasesSelected;
 
-        if (!(this.clan != 1 && nbCasesSelectedBeforeClick == 0)) {
+        if (!(this.clan != FrameStart.gameMecanics.getWhoIsPlayingInt() && nbCasesSelectedBeforeClick == 0)) {
             // Case clicked is the first case that has been selected and no other case is selected : we can deselect it OR
             // Case clicked is the second case that has been selected : we can deselect it
             if (this.isSelected && this.caseSelected[this.posx][this.posy] == 1 && nbCasesSelectedBeforeClick == 1
@@ -67,11 +67,11 @@ public class Case extends JPanel implements MouseListener {
                 this.setBackground(Color.DARK_GRAY);
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
-                        FrameStart.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 0;
+                        FrameStart.boardGamePanel.grid[i][j].caseSelected[this.posx][this.posy] = 0;
                         if (nbCasesSelectedBeforeClick == 1) {
-                            FrameStart.boardGame.grid[i][j].canBeSelected = true;     // if the case we deselect is the only one that was selected, we can select any case 
+                            FrameStart.boardGamePanel.grid[i][j].canBeSelected = true;     // if the case we deselect is the only one that was selected, we can select any case 
                         }
-                        FrameStart.boardGame.grid[i][j].nbCasesSelected--;            // indicate to all cases that one case is deselected
+                        FrameStart.boardGamePanel.grid[i][j].nbCasesSelected--;            // indicate to all cases that one case is deselected
                     }
                 }
             } // Case clicked was not selected and can be selected : we can select it
@@ -81,13 +81,14 @@ public class Case extends JPanel implements MouseListener {
                 for (int i = 0; i < 5; i++) {
                     for (int j = 0; j < 5; j++) {
                         if (nbCasesSelectedBeforeClick == 0) {
-                            FrameStart.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 1;
-                            FrameStart.boardGame.grid[i][j].canBeSelected = this.isNeighbourg(i, j);
+                            FrameStart.boardGamePanel.grid[i][j].caseSelected[this.posx][this.posy] = 1;
+                            FrameStart.boardGamePanel.grid[i][j].canBeSelected = this.isNeighbourg(i, j);
+//                            this.getParent()
                         }
                         if (nbCasesSelectedBeforeClick == 1) {
-                            FrameStart.boardGame.grid[i][j].caseSelected[this.posx][this.posy] = 2;
+                            FrameStart.boardGamePanel.grid[i][j].caseSelected[this.posx][this.posy] = 2;
                         }
-                        FrameStart.boardGame.grid[i][j].nbCasesSelected++;         // indicate to all cases that one additional case is selected
+                        FrameStart.boardGamePanel.grid[i][j].nbCasesSelected++;         // indicate to all cases that one additional case is selected
                     }
                 }
                 this.canBeSelected = true;
@@ -97,12 +98,10 @@ public class Case extends JPanel implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (this.nbCasesSelected == 0 && this.clan == 1) {
-            System.out.println("Nb caseSelected = 0");
+        if (this.nbCasesSelected == 0 && this.clan == FrameStart.gameMecanics.getWhoIsPlayingInt()) {
             this.setBackground(Color.LIGHT_GRAY);
             this.canBeSelected = true;
         } else if (this.nbCasesSelected == 1 && this.canBeSelected) {
-            System.out.println("Nb caseSelected = 1 et this case can be selected");
             this.setBackground(Color.LIGHT_GRAY);
             if (!this.isSelected) {
                 boolean neighbourg = false;
@@ -148,7 +147,7 @@ public class Case extends JPanel implements MouseListener {
     public void setClanColor(Color colorId) {
         this.clanColor = colorId;
     }
-    
+
     public Color getClanColor() {
         return this.clanColor;
     }
@@ -177,23 +176,23 @@ public class Case extends JPanel implements MouseListener {
     public void setIsSelected(boolean bool) {
         this.isSelected = bool;
     }
-    
+
     public boolean getIsSelected() {
         return this.isSelected;
     }
-    
+
     public void setCanBeSelected(boolean bool) {
         this.canBeSelected = bool;
     }
-    
-        public boolean getCanBeSelected() {
+
+    public boolean getCanBeSelected() {
         return this.canBeSelected;
     }
-        
-        public void setNbCasesSelected(int nb){
-            this.nbCasesSelected = nb;
-        }
-    
+
+    public void setNbCasesSelected(int nb) {
+        this.nbCasesSelected = nb;
+    }
+
     // END GET - SET
 
     /*

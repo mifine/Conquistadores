@@ -11,15 +11,17 @@ import java.awt.event.ActionListener.*;
 
 public class FrameStart extends javax.swing.JFrame {
 
-    public Color playerColor;
-    private final String[] config = new String[2];
-    static GamePanel boardGame;
+    private Color playerColor;
+    private boolean isEnemyIA;
+    public static Frame frameGame;
+    public static GamePanel boardGamePanel;
+    public static GameMecanics gameMecanics;
 
     /**
      * Creates new form NewJFrame
      */
     public FrameStart() {
-        this.playerColor = new Color(102, 102, 255);                                // This is the default color: blue
+        this.playerColor = new Color(102, 102, 255);                            // This is the default color: blue
         initComponents();
     }
 
@@ -317,10 +319,12 @@ public class FrameStart extends javax.swing.JFrame {
 
     private void jCheckBoxMenuHumanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuHumanActionPerformed
         jCheckBoxMenuIA.setSelected(false);
+        this.isEnemyIA = false;
     }//GEN-LAST:event_jCheckBoxMenuHumanActionPerformed
 
     private void jCheckBoxMenuIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuIAActionPerformed
         jCheckBoxMenuHuman.setSelected(false);
+        this.isEnemyIA = true;
     }//GEN-LAST:event_jCheckBoxMenuIAActionPerformed
 
     private void jMenuRulesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRulesActionPerformed
@@ -348,7 +352,7 @@ public class FrameStart extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonConsultScoresActionPerformed
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_buttonExitActionPerformed
 
     private void jCheckBoxOrangeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxOrangeActionPerformed
@@ -407,7 +411,6 @@ public class FrameStart extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
-    static final Frame frameGame = new Frame();
 
     private void changePlayerColor(String color) {
         if (color != "blue") {
@@ -443,17 +446,18 @@ public class FrameStart extends javax.swing.JFrame {
                 break;
             default:
         }
-        this.config[0] = color;
 
     }
 
     private void launchNewGame() {
 
-        this.boardGame = new GamePanel();
+        frameGame = new Frame();
+        gameMecanics = new GameMecanics();
+        boardGamePanel = new GamePanel();
+        
         frameGame.setTitle("Conquistadors");
         frameGame.setSize(700, 500);
         frameGame.setLocationRelativeTo(null);
-
         frameGame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -461,18 +465,19 @@ public class FrameStart extends javax.swing.JFrame {
             }
         });
 
-        this.boardGame.Board();
-        this.boardGame.setPlayerColor(this.playerColor);
+        boardGamePanel.setPlayerColor(this.playerColor);
 
-        frameGame.add(this.boardGame.board, BorderLayout.CENTER);
-        frameGame.add(this.boardGame.east, BorderLayout.EAST);
-        frameGame.add(this.boardGame.west, BorderLayout.WEST);
-        frameGame.add(this.boardGame.south, BorderLayout.SOUTH);
-        frameGame.add(this.boardGame.north, BorderLayout.NORTH);
-        this.boardGame.InitPlacement();
+        frameGame.add(boardGamePanel.board, BorderLayout.CENTER);
+        frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
+        frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
         
-        frameGame.show();
+        gameMecanics.setSecondPlayer(this.isEnemyIA);
+        
+        boardGamePanel.InitGamePanel();
+        
+        gameMecanics.startGame();
 
+        frameGame.show();
     }
 
 }
