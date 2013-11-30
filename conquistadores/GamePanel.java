@@ -259,39 +259,6 @@ public class GamePanel extends JPanel {
     }
 
     /*
-     * Update board display after IA action
-     */
-    public void updateDisplayIA(Case caseOrigin, Case caseDestination) {
-
-        try {
-            caseOrigin.setBackground(Color.LIGHT_GRAY);
-            System.out.println("caseOrigin.setBackground(Color.LIGHT_GRAY);");
-            Thread.sleep(500);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-
-        }
-
-        try {
-            caseDestination.setBackground(Color.LIGHT_GRAY);
-            System.out.println("caseDestination.setBackground(Color.LIGHT_GRAY);");
-            Thread.sleep(500);
-        } catch (InterruptedException ex2) {
-            Thread.currentThread().interrupt();
-        }
-        
-        try {
-            caseOrigin.repaint();
-            caseDestination.repaint();
-            System.out.println("Repaint");
-            Thread.sleep(500);
-        } catch (InterruptedException ex3) {
-            Thread.currentThread().interrupt();
-        }
-
-    }
-
-    /*
      * Send a message alert to the player if an action can not be performed due
      * to a lack of troops, ...
      */

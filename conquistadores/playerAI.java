@@ -1,6 +1,7 @@
 package conquistadores;
 
 import conquistadores.ui.FrameStart;
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -13,12 +14,19 @@ public class PlayerAI extends Player {
 
     @Override
     public void playTurn() {
-        System.out.println("IA Start Turn");
-        this.setCasesClickPossibility(false);
-        for (int action = 0; action < Game.MAX_ACTIONS_PER_TURN; action++) {
-            System.out.println("IA Start Action");
-            this.play();
-        }
+
+        Thread t = new Thread() {
+            public void run() {
+                System.out.println("IA Start Turn");
+                setCasesClickPossibility(false);
+                for (int action = 0; action < Game.MAX_ACTIONS_PER_TURN; action++) {
+                    System.out.println("IA Start Action");
+                    play();
+                }
+            }
+        };
+        t.start();
+
     }
 
     /*
@@ -87,37 +95,27 @@ public class PlayerAI extends Player {
         // 0 - If an IA case exists do: 1 to 4
         do {
             if (sizeAI != 0) {
-                System.out.println("Size AI : " + sizeAI);
                 int rand;
                 int origin = this.getRandomNb(sizeAI);
                 caseOrigin = aiCases.get(origin - 1);
-                System.out.println("Found an origin case : " + caseOrigin.posx + "-" + caseOrigin.posy);
                 neighbours = caseOrigin.getNeighbours();
                 if (neighbours[1] == null) {
                     do {
                         rand = this.getRandomNb(4);
-                        System.out.println("rand = " + rand);
                     } while (neighbours[rand - 1] == null);
                     caseDestination = neighbours[rand - 1];
                 } else {
                     caseDestination = neighbours[1];
                 }
-                //      System.out.println("Found a neighbour : " + caseDestination.posx + "-" + caseDestination.posy);
+                caseOrigin.updateBackgroundDisplay();
+                caseDestination.updateBackgroundDisplay();
                 if (caseOrigin.getTroopsNumber() > 1) {
-                    System.out.println("caseOrigin.getClan :" + caseOrigin.getClan());
-                    System.out.println("caseDestination.getClan :" + caseDestination.getClan());
                     if (caseOrigin.getClan() == caseDestination.getClan()) {
                         result = FrameStart.gameMecanics.resolveSend(caseOrigin, caseDestination);
-                        System.out.println("SEND " + result);
                     } else {
                         result = FrameStart.gameMecanics.resolveAttack(caseOrigin, caseDestination);
-                        System.out.println("ATTACK " + result);
                     }
-                    System.out.println("result = " + result);
                     if (result) {
-                        // Cases have been selected, action has been correctly done: Display the actions. 
-                        FrameStart.boardGamePanel.updateDisplayIA(caseOrigin, caseDestination);
-                        System.out.println("Board is updated ");
                         casesToReturn[0] = caseOrigin;
                         casesToReturn[1] = caseDestination;
                     }

@@ -20,7 +20,17 @@ public class Game {
     final static int MAX_TROOPS_PER_CASE = 13;
 
     public static void main(String[] arg) {
-        new Game();
+        
+        /*
+         * Create and display the form
+         */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Game();
+                //new NewJFramegger().setVisible(true);
+            }
+        });
+        
     }
 
     public Game() {

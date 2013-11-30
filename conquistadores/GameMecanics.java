@@ -41,13 +41,13 @@ public class GameMecanics {
         }
         currentPlayer.playTurn();
     }
-
     /*
      * Resolve an Attack @params Case caseOrigin, Case caseDestination
      *
      * returns true if the attack was possible and has been done returns false
      * if the attack was not possible
      */
+
     public boolean resolveAttack(Case caseOrigin, Case caseDestination) {
         boolean attack;
         int attackTroops = caseOrigin.getTroopsNumber() - 1;
@@ -125,10 +125,10 @@ public class GameMecanics {
      * Close an action turn
      */
     public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isIA) {
-        if(!isIA) {
+        if (!isIA) {
             FrameStart.boardGamePanel.closeActionTurn(caseOrigin, caseDestination);
         } else {
-            
+
         }
         this.actionNumber++;
         if (this.actionNumber > Game.MAX_ACTIONS_PER_TURN) {
@@ -137,9 +137,10 @@ public class GameMecanics {
     }
 
     /*
-     * Close a turn if no more actions are possible then check if the game can continue with the next player or 
-     * if the game is finished
-     * if Game can continue, change the player who plays and do currentPlayer.playTurn(turnNb)
+     * Close a turn if no more actions are possible then check if the game can
+     * continue with the next player or if the game is finished if Game can
+     * continue, change the player who plays and do
+     * currentPlayer.playTurn(turnNb)
      */
     public void closeTurn() {
         this.setCurrentPlayer((this.whoIsPlaying == "Player 1") ? 2 : 1);

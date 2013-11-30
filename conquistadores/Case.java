@@ -240,4 +240,14 @@ public class Case extends JPanel implements MouseListener {
         }
     }
 
+    public void updateBackgroundDisplay() {
+        try {
+            this.setBackground(Color.LIGHT_GRAY);
+            Thread.sleep(500);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        this.repaint();
+    }
+
 }
