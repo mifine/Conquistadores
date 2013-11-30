@@ -1,7 +1,6 @@
 package conquistadores;
 
 import conquistadores.ui.FrameStart;
-import java.awt.Color;
 import java.util.ArrayList;
 
 /**

@@ -16,7 +16,7 @@ public class Game {
 
     //declare game constants 
     final static int MAX_TURN_NUMBER = 5;
-    final static int MAX_ACTIONS_PER_TURN = 3;
+    final static int MAX_ACTIONS_PER_TURN = 1;
     final static int MAX_TROOPS_PER_CASE = 13;
 
     public static void main(String[] arg) {

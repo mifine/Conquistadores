@@ -150,7 +150,7 @@ public class GameMecanics {
         this.turnNumber++;
         this.actionNumber = 1;
 
-        if (this.turnNumber > Game.MAX_TURN_NUMBER * 2) {
+        if (this.turnNumber > Game.MAX_TURN_NUMBER * 2 && this.whoIsPlaying != this.whoPlaysFirst) {
             try {
                 Thread.sleep(500);
                 finalScore = this.countScores();
