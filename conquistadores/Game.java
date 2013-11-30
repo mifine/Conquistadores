@@ -14,7 +14,7 @@ public class Game {
     final static Frame F = new FrameStart();
 
     //declare game constants 
-    final static int MAX_TURN_NUMBER = 3;
+    final static int MAX_TURN_NUMBER = 5;
     final static int MAX_ACTIONS_PER_TURN = 3;
     final static int MAX_TROOPS_PER_CASE = 13;
 

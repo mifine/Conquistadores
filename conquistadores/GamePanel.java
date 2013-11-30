@@ -14,7 +14,6 @@ public class GamePanel extends JPanel {
 
     public static Color playerColor;
 
-    public int[] finalScore = new int[3];
     public int[] selectedCase = new int[2];
 
     public JPanel board = new JPanel();
@@ -258,13 +257,13 @@ public class GamePanel extends JPanel {
     /*
      * Send a message alert to the player if an action can not be performed due to a lack of troops, ...
      */
-    public void showFinalScore() {
+    public void showFinalScore(int score1, int score2) {
         final Frame alert = new Frame();
-        JLabel playerScoreLabel = new JLabel("Scores: Player 1 = " + this.finalScore[1] + " / Player 2 = " + this.finalScore[2]);
+        JLabel playerScoreLabel = new JLabel("Scores: Player 1 = " + score1 + " / Player 2 = " + score2);
         // JLabel enemyScoreLabel = new JLabel("Enemy score = " + this.finalScore[2]);
         // JLabel nativeScoreLabel = new JLabel("Enemy score = " + this.finalScore[0]);
         alert.setTitle("Conquistadors");
-        alert.setSize(230, 90);
+        alert.setSize(260, 90);
         alert.add(playerScoreLabel);
         //   alert.add(enemyScoreLabel);
         // alert.add(nativeScoreLabel);

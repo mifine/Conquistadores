@@ -17,6 +17,7 @@ public class GameMecanics {
     private Player currentPlayer;
     private String whoIsPlaying;
     private int whoIsPlayingInt;
+    private int[] finalScore = new int[3];
 
     public int turnNumber = 1;
     public int actionNumber = 1;
@@ -145,7 +146,8 @@ public class GameMecanics {
             if (this.turnNumber > Game.MAX_TURN_NUMBER * 2) {
                 try {
                     Thread.sleep(500);
-                    FrameStart.boardGamePanel.showFinalScore();
+                    finalScore = this.countScores();
+                    FrameStart.boardGamePanel.showFinalScore(finalScore[1],finalScore[2]);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
@@ -158,8 +160,7 @@ public class GameMecanics {
         if (player == 1) {
             this.currentPlayer = player1;
             this.whoIsPlaying = "Player 1";
-        }
-        else {
+        } else {
             this.currentPlayer = player2;
             this.whoIsPlaying = "Player 2";
         }
