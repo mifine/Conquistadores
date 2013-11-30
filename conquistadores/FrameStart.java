@@ -1,9 +1,10 @@
-package conquistadores.ui;
+package conquistadores;
 
 /**
  *
  * @author mifine
  */
+import static conquistadores.Game.GROUND_TYPE;
 import conquistadores.GameMecanics;
 import conquistadores.GamePanel;
 import java.awt.*;
@@ -25,13 +26,13 @@ public class FrameStart extends javax.swing.JFrame {
     public FrameStart() {
         this.playerColor = new Color(102, 102, 255);                            // This is the default color: blue
         this.isEnemyIA = true;                                                  // By default, play against IA
-        
+
         /*
          * Create and display the form
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 initComponents();
             }
         });
@@ -40,11 +41,6 @@ public class FrameStart extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        jPopupMenu2 = new javax.swing.JPopupMenu();
-        jPopupMenu3 = new javax.swing.JPopupMenu();
-        jPopupMenu4 = new javax.swing.JPopupMenu();
-        jPopupMenu5 = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -68,12 +64,14 @@ public class FrameStart extends javax.swing.JFrame {
         jCheckBoxPurple = new javax.swing.JCheckBoxMenuItem();
         jCheckBoxYellow = new javax.swing.JCheckBoxMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         jCheckBoxMenuHuman = new javax.swing.JCheckBoxMenuItem();
         jCheckBoxMenuIA = new javax.swing.JCheckBoxMenuItem();
         jMenuInformations = new javax.swing.JMenu();
         jMenuScores = new javax.swing.JMenuItem();
         jMenuRules = new javax.swing.JMenuItem();
         jMenuAbout = new javax.swing.JMenuItem();
+        jMenuOptionsConstants = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -262,6 +260,15 @@ public class FrameStart extends javax.swing.JFrame {
         jMenuOptions.add(jCheckBoxMenuIA);
 
         jMenuBar.add(jMenuOptions);
+        jMenuOptions.add(jSeparator2);
+
+        jMenuOptionsConstants.setText("Options");
+        jMenuOptionsConstants.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuOptionsConstantsActionPerformed(evt);
+            }
+        });
+        jMenuOptions.add(jMenuOptionsConstants);
 
         jMenuInformations.setText("Informations");
 
@@ -347,6 +354,14 @@ public class FrameStart extends javax.swing.JFrame {
         frameRules.show();
     }//GEN-LAST:event_jMenuRulesActionPerformed
 
+    private void jMenuOptionsConstantsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRulesActionPerformed
+        FrameOptions frameOptions = new FrameOptions();
+        frameOptions.setTitle("Options");
+        frameOptions.setSize(450, 370);
+        frameOptions.setLocationRelativeTo(null);
+        frameOptions.show();
+    }//GEN-LAST:event_jMenuOptionsConstantsActionPerformed
+
     private void jMenuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAboutActionPerformed
         FrameAbout frameAbout = new FrameAbout();
         frameAbout.setTitle("About");
@@ -415,13 +430,10 @@ public class FrameStart extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuOptions;
     private javax.swing.JMenuItem jMenuRules;
     private javax.swing.JMenuItem jMenuScores;
+    private javax.swing.JMenuItem jMenuOptionsConstants;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JPopupMenu jPopupMenu2;
-    private javax.swing.JPopupMenu jPopupMenu3;
-    private javax.swing.JPopupMenu jPopupMenu4;
-    private javax.swing.JPopupMenu jPopupMenu5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     // End of variables declaration//GEN-END:variables
 
     private void changePlayerColor(String color) {
@@ -484,12 +496,25 @@ public class FrameStart extends javax.swing.JFrame {
         frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
 
         gameMecanics.setSecondPlayer(this.isEnemyIA);
+        this.setGroundColors();
 
         boardGamePanel.InitGamePanel();
 
         frameGame.show();
         gameMecanics.startGame();
 
+    }
+
+    private static void setGroundColors() {
+        if (Game.GROUND_TYPE == 1) {
+            Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.DARK_GRAY;
+        } else if (GROUND_TYPE == 2) {
+            Game.GROUND_COLOR[0] = new Color(154, 205, 50);                              // Forest : +2 DEF
+            Game.GROUND_COLOR[1] = new Color(238, 221, 130);                             // Plain : NO BONUS
+            Game.GROUND_COLOR[2] = new Color(119, 136, 153);                             // Mountain : +2 ATT
+            Game.GROUND_COLOR[3] = new Color(161, 218, 28);                              // Swamp : not used yet
+            Game.GROUND_COLOR[4] = new Color(161, 218, 28);                              // Desert : not used yet
+        }
     }
 
 }

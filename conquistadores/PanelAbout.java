@@ -1,4 +1,4 @@
-package conquistadores.ui;
+package conquistadores;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

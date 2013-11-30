@@ -1,7 +1,5 @@
 package conquistadores;
 
-import conquistadores.ui.FrameStart;
-
 /**
  *
  * @author mifine
@@ -12,6 +10,11 @@ public class PlayerHuman extends Player {
     public void playTurn() {
         System.out.println("Human Plays");
         this.setCasesClickPossibility(true);
+    }
+
+    @Override
+    public String whoAmI() {
+        return "Human";
     }
 
 }

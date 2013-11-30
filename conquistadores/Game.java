@@ -4,7 +4,6 @@ package conquistadores;
  *
  * @author mifine
  */
-import conquistadores.ui.FrameStart;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.Panel.*;
@@ -15,12 +14,20 @@ public class Game {
     final static Frame F = new FrameStart();
 
     //declare game constants 
-    final static int MAX_TURN_NUMBER = 5;
-    final static int MAX_ACTIONS_PER_TURN = 1;
-    final static int MAX_TROOPS_PER_CASE = 13;
+    static int MAX_TURN_NUMBER = 10;
+    static int MAX_ACTIONS_PER_TURN = 3;
+    static int MAX_TROOPS_PER_CASE = 17;
+    static int ADD_TROOPS_PER_TURN = 1;
+    static int BOARD_SIZE = 7;
+    static int INITIAL_TROOPS_NATIVE = 7;
+    static int INITIAL_TROOPS_PLAYER = 11;
+    static int AI_LEVEL = 0;
+    static int GROUND_TYPE = 1;
+    static String PLACEMENT = "random";                                   // random or normal
+    final static Color[] GROUND_COLOR = new Color[5];
 
     public static void main(String[] arg) {
-        
+
         /*
          * Create and display the form
          */
@@ -30,7 +37,7 @@ public class Game {
                 //new NewJFramegger().setVisible(true);
             }
         });
-        
+
     }
 
     public Game() {

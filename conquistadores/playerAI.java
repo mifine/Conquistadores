@@ -1,7 +1,5 @@
 package conquistadores;
 
-import conquistadores.ui.FrameStart;
-import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -11,16 +9,16 @@ import java.util.ArrayList;
 public class PlayerAI extends Player {
 
     private int level;                       // level = 0 : "random", 1 : "easy", 2 : "normal" or 3 : "difficult"
+    Case caseOrigin;
+    Case caseDestination;
 
     @Override
     public void playTurn() {
 
         Thread t = new Thread() {
             public void run() {
-                System.out.println("IA Start Turn");
                 setCasesClickPossibility(false);
                 for (int action = 0; action < Game.MAX_ACTIONS_PER_TURN; action++) {
-                    System.out.println("IA Start Action");
                     play();
                 }
             }
@@ -33,10 +31,9 @@ public class PlayerAI extends Player {
      * Determine which action the IA will play
      */
     public void play() {
-        Case[] cases = new Case[2];
         switch (this.level) {
             case 0:
-                cases = this.playRandom();
+                this.playRandom();
                 break;
             case 1:
                 this.playEasy();
@@ -49,14 +46,13 @@ public class PlayerAI extends Player {
                 break;
             default:
         }
-        this.closeActionTurn(cases[0], cases[1]);
-        System.out.println("IA close Action Turn OK");
+        this.closeActionTurn();
     }
 
     /*
      * Gameplay for an random IA // to test the IA implementation
      */
-    public Case[] playRandom() {
+    public void playRandom() {
 
         /*
          * Random algorithm:
@@ -69,25 +65,19 @@ public class PlayerAI extends Player {
          *
          * http://www.tutorialspoint.com/java/java_arraylist_class.htm
          */
-        Case boardCase[][] = new Case[5][5];
+        Case boardCase[][] = new Case[Game.BOARD_SIZE][Game.BOARD_SIZE];
         ArrayList<Case> aiCases = new ArrayList<Case>();
-        Case caseOrigin;
-        Case caseDestination;
-        Case[] neighbours = new Case[4];
-        Case[] casesToReturn = new Case[2];
 
-        for (int i = 0;
-                i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        Case[] neighbours = new Case[4];
+
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 boardCase[i][j] = FrameStart.boardGamePanel.grid[i][j];
                 if (boardCase[i][j].getClan() == 2) {
                     aiCases.add(boardCase[i][j]);
                 }
             }
         }
-
-        System.out.println(
-                "IA get all board cases OK");
 
         int sizeAI = aiCases.size();
         boolean result = false;
@@ -96,17 +86,27 @@ public class PlayerAI extends Player {
         do {
             if (sizeAI != 0) {
                 int rand;
-                int origin = this.getRandomNb(sizeAI);
-                caseOrigin = aiCases.get(origin - 1);
+                do {
+                    int origin = this.getRandomNb(sizeAI);
+                    caseOrigin = aiCases.get(origin);
+                } while (caseOrigin.getTroopsNumber() == 1);
                 neighbours = caseOrigin.getNeighbours();
-                if (neighbours[1] == null) {
+                if (Game.PLACEMENT == "normalTUTUTUTU") {
+                    if (neighbours[1] == null) {
+                        do {
+                            rand = this.getRandomNb(4);
+                        } while (neighbours[rand] == null);
+                        caseDestination = neighbours[rand];
+                    } else {
+                        caseDestination = neighbours[1];
+                    }
+                } else {
                     do {
                         rand = this.getRandomNb(4);
-                    } while (neighbours[rand - 1] == null);
-                    caseDestination = neighbours[rand - 1];
-                } else {
-                    caseDestination = neighbours[1];
+                    } while (neighbours[rand] == null);
+                    caseDestination = neighbours[rand];
                 }
+
                 caseOrigin.updateBackgroundDisplay();
                 caseDestination.updateBackgroundDisplay();
                 if (caseOrigin.getTroopsNumber() > 1) {
@@ -115,18 +115,18 @@ public class PlayerAI extends Player {
                     } else {
                         result = FrameStart.gameMecanics.resolveAttack(caseOrigin, caseDestination);
                     }
-                    if (result) {
-                        casesToReturn[0] = caseOrigin;
-                        casesToReturn[1] = caseDestination;
+                    if (!result) {
+                        this.caseOrigin.initialize();
+                        this.caseDestination.initialize();
+                        this.caseOrigin.repaint();
+                        this.caseDestination.repaint();
                     }
                 }
             } else {
                 result = true;
             }
-        } while (result
-                == false);
+        } while (result == false);
 
-        return casesToReturn;
     }
 
     /*
@@ -157,14 +157,19 @@ public class PlayerAI extends Player {
     /*
      * Close the action turn for IA
      */
-    public void closeActionTurn(Case caseOrigin, Case caseDestination) {
-        FrameStart.gameMecanics.closeActionTurn(caseOrigin, caseDestination, false);
+    public void closeActionTurn() {
+        FrameStart.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
     }
 
     /*
-     * Returns a random number between 1 and max @returns int
+     * Returns a random number between 0 and max-1 @returns int
      */
     public int getRandomNb(int max) {
-        return (int) (Math.random() * max) + 1;
+        return (int) (Math.random() * max);
+    }
+
+    @Override
+    public String whoAmI() {
+        return "AI";
     }
 }

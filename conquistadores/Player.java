@@ -1,7 +1,5 @@
 package conquistadores;
 
-import conquistadores.ui.FrameStart;
-
 /**
  *
  * @author mifine
@@ -27,8 +25,8 @@ public abstract class Player {
     }
 
     public void setCasesClickPossibility(boolean bool){
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 FrameStart.boardGamePanel.setIsHuman(bool);
                 FrameStart.boardGamePanel.grid[i][j].setIsHuman(bool);
                 
@@ -41,5 +39,8 @@ public abstract class Player {
         this.level = lvl;
     }
    
+    public String whoAmI() {
+        return "Player";
+    }
    
 }

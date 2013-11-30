@@ -5,8 +5,6 @@
  */
 package conquistadores;
 
-import conquistadores.ui.FrameStart;
-
 /**
  *
  * @author mifine
@@ -28,6 +26,8 @@ public class GameMecanics {
         double rand = Math.random();
         this.whoPlaysFirst = (rand < 0.5) ? "Player 1" : "Player 2";
         player1 = new PlayerHuman();
+//        player1 = new PlayerAI();
+//        player1.setLevel(Game.AI_LEVEL);
     }
 
     /*
@@ -53,8 +53,8 @@ public class GameMecanics {
         int attackTroops = caseOrigin.getTroopsNumber() - 1;
         if (attackTroops > 0) {
             int defendTroops = caseDestination.getTroopsNumber();
-            int attackLvl = attackTroops + this.alea();
-            int defendLvl = defendTroops + this.alea();
+            int attackLvl = attackTroops + this.alea() + this.bonus("attack", caseOrigin.getGround());
+            int defendLvl = defendTroops + this.alea() + this.bonus("defense", caseDestination.getGround());
             int diff = attackLvl - defendLvl;
             if (diff > 0) {
                 caseOrigin.setTroopsNumber(1);
@@ -87,17 +87,19 @@ public class GameMecanics {
         int originTroops = caseOrigin.getTroopsNumber();
         int troopsSent = originTroops - 1;
 
-        if (troopsSent > 0 && destinationTroops < 12) {
-            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE) {
+        if (troopsSent > 0 && destinationTroops < (Game.MAX_TROOPS_PER_CASE + (int)(this.turnNumber-1)/2 - 1)) {
+            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE + (int)(this.turnNumber-1)/2) {
                 caseOrigin.setTroopsNumber(originTroops - troopsSent);
                 caseDestination.setTroopsNumber(destinationTroops + troopsSent);
             } else {
-                caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE + destinationTroops);
-                caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE);
+                caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE - (int)(this.turnNumber-1)/2 + 2 + destinationTroops);
+                caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE + (int)(this.turnNumber-1)/2);
             }
             sendTroops = true;
         } else {
-            FrameStart.boardGamePanel.sendAlert("You can not perform this action. Please do another action.", 400, 90);
+            if (currentPlayer.whoAmI() == "Human") {
+                FrameStart.boardGamePanel.sendAlert("You can not perform this action. Please do another action.", 400, 90);
+            }
             sendTroops = false;
         }
         return sendTroops;
@@ -111,14 +113,31 @@ public class GameMecanics {
         Double rand = Math.random();
         if (rand < 0.5) {
             alea = 1;
-        } else if (rand >= 0.5 && rand < 0.8) {
+        } else if (rand >= 0.5 && rand < 0.85) {
             alea = 2;
-        } else if (rand >= 0.8 && rand < 0.95) {
+        } else if (rand >= 0.85 && rand < 0.90) {
             alea = 3;
-        } else {
-            alea = 4;
-        }
+        } 
         return alea;
+    }
+
+    /*
+     * Determine the alea that is added to the ATT or DEF level during an attack
+     */
+    private int bonus(String type, int ground) {
+        int bonus;
+        switch (ground) {
+            case 0:
+                bonus = (type == "defense") ? 3 : 0;
+                break;
+            case 2:
+                bonus = (type == "attack") ? 3 : 0;
+                break;
+            default:
+                bonus = 0;
+                break;
+        }
+        return bonus;
     }
 
     /*
@@ -147,19 +166,36 @@ public class GameMecanics {
 
         if (this.turnNumber < Game.MAX_TURN_NUMBER * 2) {
             FrameStart.boardGamePanel.updateNorthPanel((int) (this.turnNumber) / 2 + 1, this.whoIsPlaying);
+
         }
         this.turnNumber++;
         this.actionNumber = 1;
 
-        if (this.turnNumber > Game.MAX_TURN_NUMBER * 2 && this.whoIsPlaying != this.whoPlaysFirst) {
-            try {
-                Thread.sleep(500);
-                finalScore = this.countScores();
-                FrameStart.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
+//        if (this.turnNumber > Game.MAX_TURN_NUMBER * 2 && this.whoIsPlaying == this.whoPlaysFirst) {
+//            try {
+//                Thread.sleep(500);
+//                finalScore = this.countScores();
+//                FrameStart.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
+//            } catch (InterruptedException ex) {
+//                Thread.currentThread().interrupt();
+//            }
+//        }
+
+        // at the end of each turn, increase the number of troops per case. +X for Players, +2X for Natives. 
+        if (this.whoIsPlaying == this.whoPlaysFirst) {
+            for (int i = 0; i < Game.BOARD_SIZE; i++) {
+                for (int j = 0; j < Game.BOARD_SIZE; j++) {
+                    Case cas = FrameStart.boardGamePanel.grid[i][j];
+                    if (cas.getClan() == 0) {
+                        cas.setTroopsNumber(3 * Game.ADD_TROOPS_PER_TURN + cas.getTroopsNumber());
+                    } else {
+                        cas.setTroopsNumber(Game.ADD_TROOPS_PER_TURN + cas.getTroopsNumber());
+                    }
+                    cas.repaint();
+                }
             }
         }
+
         this.currentPlayer.playTurn();
     }
 
@@ -186,8 +222,8 @@ public class GameMecanics {
         scores[0] = 0;
         scores[1] = 0;
         scores[2] = 0;
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 scores[FrameStart.boardGamePanel.grid[i][j].getClan()]
                         += (10 + FrameStart.boardGamePanel.grid[i][j].getTroopsNumber());
             }
@@ -198,7 +234,7 @@ public class GameMecanics {
     public void setSecondPlayer(boolean isEnemyIA) {
         if (isEnemyIA) {
             player2 = new PlayerAI();
-            player2.setLevel(0);
+            player2.setLevel(Game.AI_LEVEL);
         } else {
             player2 = new PlayerHuman();
         }

@@ -4,7 +4,6 @@ package conquistadores;
  *
  * @author mifine
  */
-import conquistadores.ui.FrameStart;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -14,14 +13,15 @@ import javax.swing.*;
 
 public class Case extends JPanel implements MouseListener {
 
-    public int posx, posy;
+    private int posx, posy;
     private int nbCasesSelected;
     private int clan;
     private int troopsNumber;
+    private int ground;
     private boolean isHuman;
     private Color initialColor, clanColor;
     private boolean isSelected, canBeSelected;
-    public int[][] caseSelected = new int[5][5];
+    public int[][] caseSelected = new int[Game.BOARD_SIZE][Game.BOARD_SIZE];
 
     public Case(int x, int y) {
         super();
@@ -33,16 +33,16 @@ public class Case extends JPanel implements MouseListener {
 
     public void paint(Graphics g) {
         super.paint(g);
-        int xnb, ynb = 52;
-        int x = 2, y = 2, width = 132, height = 74, arcWidth = 10, ArcHeight = 10;
+        int xnb, ynb = 52 * 5 / Game.BOARD_SIZE;
+        int x = 15 * 5 / Game.BOARD_SIZE, y = 15 * 5 / Game.BOARD_SIZE, width = 106 * 5 / Game.BOARD_SIZE, height = 48 * 5 / Game.BOARD_SIZE, arcWidth = 10, ArcHeight = 10;
         g.setColor(this.clanColor);
         g.fillRoundRect(x, y, width, height, arcWidth, ArcHeight);
         g.setColor(this.clanColor.darker().darker());
-        g.setFont(new Font("Verdana", 1, 40));
+        g.setFont(new Font("Verdana", 1, 40 * 5 / Game.BOARD_SIZE));
         if (this.troopsNumber < 10) {
-            xnb = 51;
+            xnb = 51 * 5 / Game.BOARD_SIZE;
         } else {
-            xnb = 38;
+            xnb = 38 * 5 / Game.BOARD_SIZE;
         }
         g.drawString(Integer.toString(this.troopsNumber), xnb, ynb);
     }
@@ -66,9 +66,9 @@ public class Case extends JPanel implements MouseListener {
                 if (this.isSelected && this.caseSelected[this.posx][this.posy] == 1 && nbCasesSelectedBeforeClick == 1
                         || this.isSelected && this.caseSelected[this.posx][this.posy] == 2) {
                     this.isSelected = false;
-                    this.setBackground(Color.DARK_GRAY);
-                    for (int i = 0; i < 5; i++) {
-                        for (int j = 0; j < 5; j++) {
+                    this.setBackground(this.initialColor);
+                    for (int i = 0; i < Game.BOARD_SIZE; i++) {
+                        for (int j = 0; j < Game.BOARD_SIZE; j++) {
                             FrameStart.boardGamePanel.grid[i][j].caseSelected[this.posx][this.posy] = 0;
                             if (nbCasesSelectedBeforeClick == 1) {
                                 FrameStart.boardGamePanel.grid[i][j].canBeSelected = true;     // if the case we deselect is the only one that was selected, we can select any case
@@ -84,8 +84,8 @@ public class Case extends JPanel implements MouseListener {
                  */ else if (!this.isSelected && this.canBeSelected && this.nbCasesSelected < 2) {
                     this.isSelected = true;
                     this.setBackground(Color.LIGHT_GRAY);
-                    for (int i = 0; i < 5; i++) {
-                        for (int j = 0; j < 5; j++) {
+                    for (int i = 0; i < Game.BOARD_SIZE; i++) {
+                        for (int j = 0; j < Game.BOARD_SIZE; j++) {
                             if (nbCasesSelectedBeforeClick == 0) {
                                 FrameStart.boardGamePanel.grid[i][j].caseSelected[this.posx][this.posy] = 1;
                                 FrameStart.boardGamePanel.grid[i][j].canBeSelected = this.isNeighbour(i, j);
@@ -114,8 +114,8 @@ public class Case extends JPanel implements MouseListener {
                 this.setBackground(Color.LIGHT_GRAY);
                 if (!this.isSelected) {
                     boolean neighbour = false;
-                    for (int i = 0; i < 5; i++) {
-                        for (int j = 0; j < 5; j++) {
+                    for (int i = 0; i < Game.BOARD_SIZE; i++) {
+                        for (int j = 0; j < Game.BOARD_SIZE; j++) {
                             if (this.isNeighbour(i, j) && this.caseSelected[i][j] == 1) {
                                 neighbour = true;
                             }
@@ -162,8 +162,8 @@ public class Case extends JPanel implements MouseListener {
 
         neighbour[0] = (x > 0) ? FrameStart.boardGamePanel.grid[x - 1][y] : null;
         neighbour[1] = (y > 0) ? FrameStart.boardGamePanel.grid[x][y - 1] : null;
-        neighbour[2] = (y < 4) ? FrameStart.boardGamePanel.grid[x][y + 1] : null;
-        neighbour[3] = (x < 4) ? FrameStart.boardGamePanel.grid[x + 1][y] : null;
+        neighbour[2] = (y < (Game.BOARD_SIZE - 1)) ? FrameStart.boardGamePanel.grid[x][y + 1] : null;
+        neighbour[3] = (x < (Game.BOARD_SIZE - 1)) ? FrameStart.boardGamePanel.grid[x + 1][y] : null;
 
         return neighbour;
     }
@@ -180,9 +180,9 @@ public class Case extends JPanel implements MouseListener {
     public void setClan(int clanId) {
         this.clan = clanId;
         if (clanId == 0) {
-            this.troopsNumber = 5;
+            this.troopsNumber = Game.INITIAL_TROOPS_NATIVE;
         } else {
-            this.troopsNumber = 10;
+            this.troopsNumber = Game.INITIAL_TROOPS_PLAYER;
         }
     }
 
@@ -222,6 +222,16 @@ public class Case extends JPanel implements MouseListener {
         this.isHuman = b;
     }
 
+    public void setGround(int gd) {
+        this.ground = gd;
+        this.initialColor = Game.GROUND_COLOR[gd];
+        this.setBackground(this.initialColor);
+    }
+
+    public int getGround() {
+        return this.ground;
+    }
+
     // END GET - SET
 
     /*
@@ -231,10 +241,9 @@ public class Case extends JPanel implements MouseListener {
         this.isSelected = false;
         this.canBeSelected = true;
         this.nbCasesSelected = 0;
-        this.initialColor = Color.DARK_GRAY;
         this.setBackground(this.initialColor);
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 this.caseSelected[i][j] = 0;
             }
         }
@@ -244,6 +253,7 @@ public class Case extends JPanel implements MouseListener {
         try {
             this.setBackground(Color.LIGHT_GRAY);
             Thread.sleep(500);
+            // Thread.sleep(10);
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }

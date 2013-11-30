@@ -4,7 +4,6 @@ package conquistadores;
  *
  * @author mifine
  */
-import conquistadores.ui.FrameStart;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.WindowAdapter;
@@ -20,7 +19,7 @@ public class GamePanel extends JPanel {
     public JPanel board = new JPanel();
     public JPanel south = new JPanel();
     public JPanel north = new JPanel();
-    public Case grid[][] = new Case[5][5];
+    public Case grid[][] = new Case[Game.BOARD_SIZE][Game.BOARD_SIZE];
 
     private int i, j;
     public Case caseOrigin;
@@ -28,7 +27,7 @@ public class GamePanel extends JPanel {
     private boolean isHuman;
 
     public GamePanel() {
-        this.board.setLayout(new GridLayout(5, 5));
+        this.board.setLayout(new GridLayout(Game.BOARD_SIZE, Game.BOARD_SIZE));
     }
 
     /*
@@ -40,25 +39,37 @@ public class GamePanel extends JPanel {
         this.populateCenterPanel();
         this.populateNorthPanel();
         this.populateSouthPanel();
+        int middle = (int) Game.BOARD_SIZE / 2;
 
         // Build the first grid to play
-        for (i = 0; i < 5; i++) {
-            for (j = 0; j < 5; j++) {
-                if (j < 2) {
-                    this.grid[i][j].setClan(1);
-                    this.grid[i][j].setClanColor(this.playerColor);
+        for (i = 0; i < Game.BOARD_SIZE; i++) {
+            for (j = 0; j < Game.BOARD_SIZE; j++) {
+                if (Game.PLACEMENT == "random") {
+                    int r = this.getRandomNb(5);
+                    this.placeGrid(r, i, j, 2);
+                } else {
+                    this.placeGrid(j, i, j, middle);
                 }
-                if (j == 2) {
-                    this.grid[i][j].setClan(0);
-                    this.grid[i][j].setClanColor(new Color(218, 165, 32));
-                }
-                if (j > 2) {
-                    this.grid[i][j].setClan(2);
-                    this.grid[i][j].setClanColor(new Color(255, 51, 51));
-                }
-                this.grid[i][j].repaint();
             }
         }
+    }
+
+    public void placeGrid(int r, int i, int j, int sep) {
+        if (r < sep) {
+            this.grid[i][j].setClan(1);
+            this.grid[i][j].setClanColor(this.playerColor);
+        }
+        if (r == sep) {
+            this.grid[i][j].setClan(0);
+            this.grid[i][j].setClanColor(new Color(218, 165, 32));
+        }
+        if (r > sep) {
+            this.grid[i][j].setClan(2);
+            this.grid[i][j].setClanColor(new Color(255, 51, 51));
+        }
+        int ground = this.getRandomNb(3);
+        this.grid[i][j].setGround(ground);
+        this.grid[i][j].repaint();
     }
 
     /*
@@ -72,11 +83,9 @@ public class GamePanel extends JPanel {
      * Populate GamePanel Grids with Cases
      */
     public void populateCenterPanel() {
-        for (i = 0; i < 5; i++) {
-            for (j = 0; j < 5; j++) {
+        for (i = 0; i < Game.BOARD_SIZE; i++) {
+            for (j = 0; j < Game.BOARD_SIZE; j++) {
                 this.grid[i][j] = new Case(i, j);
-                this.grid[i][j].setBackground(Color.DARK_GRAY);
-                this.grid[i][j].setBackground(Color.DARK_GRAY);
                 this.board.add(grid[i][j]);
             }
         }
@@ -132,7 +141,6 @@ public class GamePanel extends JPanel {
      */
     private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned(0)) {
-            //    System.out.println(caseOrigin.posx + " " + caseOrigin.posy + " ATTACKS " + caseDestination.posx + " " + caseDestination.posy);
             if (FrameStart.gameMecanics.resolveAttack(this.caseOrigin, this.caseDestination)) {
                 FrameStart.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
             }
@@ -145,7 +153,6 @@ public class GamePanel extends JPanel {
      */
     private void buttonSendActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned(1)) {
-            //    System.out.println(caseOrigin.posx + " " + caseOrigin.posy + " SENDS TROOPS TO " + caseDestination.posx + " " + caseDestination.posy);
             if (FrameStart.gameMecanics.resolveSend(this.caseOrigin, this.caseDestination)) {
                 FrameStart.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
             }
@@ -194,8 +201,8 @@ public class GamePanel extends JPanel {
      */
     public Case[] determineOriginDestination() {
         Case[] casesPlayed = new Case[2];
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 if (this.grid[0][0].caseSelected[i][j] == 1) {
                     casesPlayed[0] = this.grid[i][j];
                 }
@@ -212,12 +219,12 @@ public class GamePanel extends JPanel {
      */
     public void resetAllCases() {
 
-        for (i = 0; i < 5; i++) {
-            for (j = 0; j < 5; j++) {
+        for (i = 0; i < Game.BOARD_SIZE; i++) {
+            for (j = 0; j < Game.BOARD_SIZE; j++) {
                 this.grid[i][j].setNbCasesSelected(0);
                 this.grid[i][j].setCanBeSelected(true);
-                for (int k = 0; k < 5; k++) {
-                    for (int l = 0; l < 5; l++) {
+                for (int k = 0; k < Game.BOARD_SIZE; k++) {
+                    for (int l = 0; l < Game.BOARD_SIZE; l++) {
                         this.grid[i][j].caseSelected[k][l] = 0;
                     }
                 }
@@ -265,13 +272,9 @@ public class GamePanel extends JPanel {
     public void showFinalScore(int score1, int score2) {
         final Frame alert = new Frame();
         JLabel playerScoreLabel = new JLabel("Scores: Player 1 = " + score1 + " / Player 2 = " + score2);
-        // JLabel enemyScoreLabel = new JLabel("Enemy score = " + this.finalScore[2]);
-        // JLabel nativeScoreLabel = new JLabel("Enemy score = " + this.finalScore[0]);
         alert.setTitle("Conquistadors");
-        alert.setSize(260, 90);
+        alert.setSize(250, 90);
         alert.add(playerScoreLabel);
-        //   alert.add(enemyScoreLabel);
-        // alert.add(nativeScoreLabel);
         alert.setLocationRelativeTo(null);
         alert.addWindowListener(new WindowAdapter() {
             @Override
@@ -294,5 +297,12 @@ public class GamePanel extends JPanel {
 
     public void setIsHuman(boolean b) {
         this.isHuman = b;
+    }
+
+    /*
+     * Returns a random number between 0 and max-1 @returns int
+     */
+    public int getRandomNb(int max) {
+        return (int) (Math.random() * max);
     }
 }
