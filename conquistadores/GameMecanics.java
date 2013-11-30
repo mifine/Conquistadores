@@ -5,6 +5,8 @@
  */
 package conquistadores;
 
+import conquistadores.ui.FrameStart;
+
 /**
  *
  * @author mifine
@@ -25,11 +27,11 @@ public class GameMecanics {
     public GameMecanics() {
         double rand = Math.random();
         this.whoPlaysFirst = (rand < 0.5) ? "Player 1" : "Player 2";
-        player1 = new Human();
+        player1 = new PlayerHuman();
     }
 
     /*
-     Once everything is in place, we can start the game. 
+     * Once everything is in place, we can start the game.
      */
     public void startGame() {
         if (this.whoPlaysFirst == "Player 1") {
@@ -37,18 +39,17 @@ public class GameMecanics {
         } else {
             this.setCurrentPlayer(2);
         }
-        currentPlayer.playTurn(this.turnNumber);
+        currentPlayer.playTurn();
     }
 
     /*
-     * Resolve an Attack  
-     * returns true if the attack was possible and has been done
-     * return false if the attach was not possible
+     * Resolve an Attack @params Case caseOrigin, Case caseDestination
+     *
+     * returns true if the attack was possible and has been done returns false
+     * if the attack was not possible
      */
-    public boolean resolveAttack() {
+    public boolean resolveAttack(Case caseOrigin, Case caseDestination) {
         boolean attack;
-        Case caseOrigin = FrameStart.boardGamePanel.getCaseOrigin();
-        Case caseDestination = FrameStart.boardGamePanel.getCaseDestination();
         int attackTroops = caseOrigin.getTroopsNumber() - 1;
         if (attackTroops > 0) {
             int defendTroops = caseDestination.getTroopsNumber();
@@ -76,14 +77,12 @@ public class GameMecanics {
     }
 
     /*
-     * Resolve a troop support move
-     * returns true if the sendTroops was possible and has been done
-     * return false if the sendTroops was not possible
+     * Resolve a troop support move @params Case caseOrigin, Case
+     * caseDestination returns true if the sendTroops was possible and has been
+     * done return false if the sendTroops was not possible
      */
-    public boolean resolveSendTroops() {
+    public boolean resolveSend(Case caseOrigin, Case caseDestination) {
         boolean sendTroops;
-        Case caseOrigin = FrameStart.boardGamePanel.getCaseOrigin();
-        Case caseDestination = FrameStart.boardGamePanel.getCaseDestination();
         int destinationTroops = caseDestination.getTroopsNumber();
         int originTroops = caseOrigin.getTroopsNumber();
         int troopsSent = originTroops - 1;
@@ -125,35 +124,42 @@ public class GameMecanics {
     /*
      * Close an action turn
      */
-    public void closeActionTurn() {
-        FrameStart.boardGamePanel.closeActionTurn();
-        this.actionNumber++;
-
-        // if no more action possible this turn
-        if (this.actionNumber > Game.MAX_ACTIONS_PER_TURN) {
-            if (this.whoIsPlaying == "Player 1") {
-                this.setCurrentPlayer(2);
-            } else {
-                this.setCurrentPlayer(1);
-            }
-
-            if (this.turnNumber < Game.MAX_TURN_NUMBER * 2) {
-                FrameStart.boardGamePanel.updateNorthPanel((int) (this.turnNumber) / 2 + 1, this.whoIsPlaying);
-            }
-            this.turnNumber++;
-            this.actionNumber = 1;
-
-            if (this.turnNumber > Game.MAX_TURN_NUMBER * 2) {
-                try {
-                    Thread.sleep(500);
-                    finalScore = this.countScores();
-                    FrameStart.boardGamePanel.showFinalScore(finalScore[1],finalScore[2]);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-            this.currentPlayer.playTurn(this.turnNumber);
+    public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isIA) {
+        if(!isIA) {
+            FrameStart.boardGamePanel.closeActionTurn(caseOrigin, caseDestination);
+        } else {
+            
         }
+        this.actionNumber++;
+        if (this.actionNumber > Game.MAX_ACTIONS_PER_TURN) {
+            this.closeTurn();
+        }
+    }
+
+    /*
+     * Close a turn if no more actions are possible then check if the game can continue with the next player or 
+     * if the game is finished
+     * if Game can continue, change the player who plays and do currentPlayer.playTurn(turnNb)
+     */
+    public void closeTurn() {
+        this.setCurrentPlayer((this.whoIsPlaying == "Player 1") ? 2 : 1);
+
+        if (this.turnNumber < Game.MAX_TURN_NUMBER * 2) {
+            FrameStart.boardGamePanel.updateNorthPanel((int) (this.turnNumber) / 2 + 1, this.whoIsPlaying);
+        }
+        this.turnNumber++;
+        this.actionNumber = 1;
+
+        if (this.turnNumber > Game.MAX_TURN_NUMBER * 2) {
+            try {
+                Thread.sleep(500);
+                finalScore = this.countScores();
+                FrameStart.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        this.currentPlayer.playTurn();
     }
 
     public void setCurrentPlayer(int player) {
@@ -165,7 +171,10 @@ public class GameMecanics {
             this.whoIsPlaying = "Player 2";
         }
         this.whoIsPlayingInt = player;
+    }
 
+    public void changePlayer() {
+        this.setCurrentPlayer((this.whoIsPlaying == "Player 1") ? 2 : 1);
     }
 
     /*
@@ -187,9 +196,10 @@ public class GameMecanics {
 
     public void setSecondPlayer(boolean isEnemyIA) {
         if (isEnemyIA) {
-            player2 = new AI();
+            player2 = new PlayerAI();
+            player2.setLevel(0);
         } else {
-            player2 = new Human();
+            player2 = new PlayerHuman();
         }
     }
 

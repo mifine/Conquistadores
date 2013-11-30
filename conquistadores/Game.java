@@ -4,6 +4,7 @@ package conquistadores;
  *
  * @author mifine
  */
+import conquistadores.ui.FrameStart;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.Panel.*;

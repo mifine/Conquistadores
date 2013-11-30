@@ -1,4 +1,4 @@
-package conquistadores;
+package conquistadores.ui;
 
 /**
  *

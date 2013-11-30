@@ -1,9 +1,11 @@
-package conquistadores;
+package conquistadores.ui;
 
 /**
  *
  * @author mifine
  */
+import conquistadores.GameMecanics;
+import conquistadores.GamePanel;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.Panel.*;
@@ -22,6 +24,7 @@ public class FrameStart extends javax.swing.JFrame {
      */
     public FrameStart() {
         this.playerColor = new Color(102, 102, 255);                            // This is the default color: blue
+        this.isEnemyIA = true;                                                  // By default, play against IA
         initComponents();
     }
 
@@ -475,9 +478,9 @@ public class FrameStart extends javax.swing.JFrame {
         
         boardGamePanel.InitGamePanel();
         
+        frameGame.show();
         gameMecanics.startGame();
 
-        frameGame.show();
     }
 
 }
