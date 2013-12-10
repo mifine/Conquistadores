@@ -478,7 +478,7 @@ public class FrameStart extends javax.swing.JFrame {
         frameGame = new Frame();
         gameMecanics = new GameMecanics();
         boardGamePanel = new GamePanel();
-
+ 
         frameGame.setTitle("Conquistadors");
         frameGame.setSize(700, 500);
         frameGame.setLocationRelativeTo(null);

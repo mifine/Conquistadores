@@ -171,15 +171,15 @@ public class GameMecanics {
         this.turnNumber++;
         this.actionNumber = 1;
 
-//        if (this.turnNumber > Game.MAX_TURN_NUMBER * 2 && this.whoIsPlaying == this.whoPlaysFirst) {
-//            try {
-//                Thread.sleep(500);
-//                finalScore = this.countScores();
-//                FrameStart.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
-//            } catch (InterruptedException ex) {
-//                Thread.currentThread().interrupt();
-//            }
-//        }
+        if (this.turnNumber > Game.MAX_TURN_NUMBER * 2 && this.whoIsPlaying == this.whoPlaysFirst) {
+            try {
+                Thread.sleep(500);
+                finalScore = this.countScores();
+                FrameStart.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
 
         // at the end of each turn, increase the number of troops per case. +X for Players, +2X for Natives. 
         if (this.whoIsPlaying == this.whoPlaysFirst) {

@@ -27,7 +27,10 @@ public class GamePanel extends JPanel {
     private boolean isHuman;
 
     public GamePanel() {
-        this.board.setLayout(new GridLayout(Game.BOARD_SIZE, Game.BOARD_SIZE));
+        GridLayout g1 = new GridLayout(Game.BOARD_SIZE, Game.BOARD_SIZE);
+        g1.setHgap(1);
+        g1.setVgap(1);
+        this.board.setLayout(g1);
     }
 
     /*

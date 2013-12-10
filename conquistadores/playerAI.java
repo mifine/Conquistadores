@@ -91,7 +91,7 @@ public class PlayerAI extends Player {
                     caseOrigin = aiCases.get(origin);
                 } while (caseOrigin.getTroopsNumber() == 1);
                 neighbours = caseOrigin.getNeighbours();
-                if (Game.PLACEMENT == "normalTUTUTUTU") {
+                if (Game.PLACEMENT == "normal") {
                     if (neighbours[1] == null) {
                         do {
                             rand = this.getRandomNb(4);
