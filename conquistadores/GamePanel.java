@@ -21,7 +21,6 @@ public class GamePanel extends JPanel {
     public JPanel north = new JPanel();
     public Case grid[][] = new Case[Game.BOARD_SIZE][Game.BOARD_SIZE];
 
-    private int i, j;
     public Case caseOrigin;
     public Case caseDestination;
     private boolean isHuman;
@@ -37,7 +36,7 @@ public class GamePanel extends JPanel {
      * Initialize the token placement at the begining of a new Game. clan = 1 :
      * 10 Player 1, clan = 0 : 5 Indigeneous clan = 2 : 10 Player 2
      */
-    public void InitGamePanel() {
+    public void initGamePanel() {
 
         this.populateCenterPanel();
         this.populateNorthPanel();
@@ -45,8 +44,8 @@ public class GamePanel extends JPanel {
         int middle = (int) Game.BOARD_SIZE / 2;
 
         // Build the first grid to play
-        for (i = 0; i < Game.BOARD_SIZE; i++) {
-            for (j = 0; j < Game.BOARD_SIZE; j++) {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 if (Game.PLACEMENT == "random") {
                     int r = this.getRandomNb(5);
                     this.placeGrid(r, i, j, 2);
@@ -86,8 +85,8 @@ public class GamePanel extends JPanel {
      * Populate GamePanel Grids with Cases
      */
     public void populateCenterPanel() {
-        for (i = 0; i < Game.BOARD_SIZE; i++) {
-            for (j = 0; j < Game.BOARD_SIZE; j++) {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 this.grid[i][j] = new Case(i, j);
                 this.board.add(grid[i][j]);
             }
@@ -222,8 +221,8 @@ public class GamePanel extends JPanel {
      */
     public void resetAllCases() {
 
-        for (i = 0; i < Game.BOARD_SIZE; i++) {
-            for (j = 0; j < Game.BOARD_SIZE; j++) {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 this.grid[i][j].setNbCasesSelected(0);
                 this.grid[i][j].setCanBeSelected(true);
                 for (int k = 0; k < Game.BOARD_SIZE; k++) {
@@ -305,7 +304,7 @@ public class GamePanel extends JPanel {
     /*
      * Returns a random number between 0 and max-1 @returns int
      */
-    public int getRandomNb(int max) {
+    private int getRandomNb(int max) {
         return (int) (Math.random() * max);
     }
 }

@@ -218,8 +218,8 @@ public class Case extends JPanel implements MouseListener {
         this.nbCasesSelected = nb;
     }
 
-    public void setIsHuman(boolean b) {
-        this.isHuman = b;
+    public void setIsHuman(boolean bool) {
+        this.isHuman = bool;
     }
 
     public void setGround(int gd) {
@@ -249,6 +249,9 @@ public class Case extends JPanel implements MouseListener {
         }
     }
 
+    /*
+     * Update case background display when played by the AI
+     */
     public void updateBackgroundDisplay() {
         try {
             this.setBackground(Color.LIGHT_GRAY);

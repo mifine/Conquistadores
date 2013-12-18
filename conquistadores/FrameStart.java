@@ -498,7 +498,7 @@ public class FrameStart extends javax.swing.JFrame {
         gameMecanics.setSecondPlayer(this.isEnemyIA);
         this.setGroundColors();
 
-        boardGamePanel.InitGamePanel();
+        boardGamePanel.initGamePanel();
 
         frameGame.show();
         gameMecanics.startGame();

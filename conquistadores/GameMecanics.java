@@ -143,8 +143,8 @@ public class GameMecanics {
     /*
      * Close an action turn
      */
-    public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isIA) {
-        if (!isIA) {
+    public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isAI ) {
+        if (!isAI) {
             FrameStart.boardGamePanel.closeActionTurn(caseOrigin, caseDestination);
         } else {
 
@@ -231,8 +231,8 @@ public class GameMecanics {
         return scores;
     }
 
-    public void setSecondPlayer(boolean isEnemyIA) {
-        if (isEnemyIA) {
+    public void setSecondPlayer(boolean isEnemyAI) {
+        if (isEnemyAI) {
             player2 = new PlayerAI();
             player2.setLevel(Game.AI_LEVEL);
         } else {

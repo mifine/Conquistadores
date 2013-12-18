@@ -36,7 +36,7 @@ public class FrameAbout extends javax.swing.JFrame {
 
         jLabel2.setText("Created by mifine as a project for CNAM NFP 136");
 
-        jLabel3.setText("Graphical interface AWT & SWING");
+        jLabel3.setText("Graphical interface SWING");
 
         jLabel4.setText("IA under development");
 
