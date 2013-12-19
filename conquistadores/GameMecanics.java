@@ -18,6 +18,7 @@ public class GameMecanics {
     private String whoIsPlaying;
     private int whoIsPlayingInt;
     private int[] finalScore = new int[3];
+    public boolean isEnemyAI;
 
     public int turnNumber = 1;
     public int actionNumber = 1;
@@ -70,7 +71,7 @@ public class GameMecanics {
             }
             attack = true;
         } else {
-            FrameStart.boardGamePanel.sendAlert("You do not have enough troops to send an attack. Please do another action.", 350, 90);
+            FrameGame.boardGamePanel.sendAlert("You do not have enough troops to send an attack. Please do another action.", 350, 90);
             attack = false;
         }
         return attack;
@@ -98,7 +99,7 @@ public class GameMecanics {
             sendTroops = true;
         } else {
             if (currentPlayer.whoAmI() == "Human") {
-                FrameStart.boardGamePanel.sendAlert("You can not perform this action. Please do another action.", 400, 90);
+                FrameGame.boardGamePanel.sendAlert("You can not perform this action. Please do another action.", 400, 90);
             }
             sendTroops = false;
         }
@@ -145,7 +146,7 @@ public class GameMecanics {
      */
     public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isAI ) {
         if (!isAI) {
-            FrameStart.boardGamePanel.closeActionTurn(caseOrigin, caseDestination);
+            FrameGame.boardGamePanel.closeActionTurn(caseOrigin, caseDestination);
         } else {
 
         }
@@ -165,7 +166,7 @@ public class GameMecanics {
         this.setCurrentPlayer((this.whoIsPlaying == "Player 1") ? 2 : 1);
 
         if (this.turnNumber < Game.MAX_TURN_NUMBER * 2) {
-            FrameStart.boardGamePanel.updateNorthPanel((int) (this.turnNumber) / 2 + 1, this.whoIsPlaying);
+            FrameGame.boardGamePanel.updateNorthPanel((int) (this.turnNumber) / 2 + 1, this.whoIsPlaying);
 
         }
         this.turnNumber++;
@@ -175,17 +176,18 @@ public class GameMecanics {
             try {
                 Thread.sleep(500);
                 finalScore = this.countScores();
-                FrameStart.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
+                FrameGame.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
+            Game.sm.writeScore(finalScore[1], finalScore[2], this.isEnemyAI);
         }
 
         // at the end of each turn, increase the number of troops per case. +X for Players, +2X for Natives. 
         if (this.whoIsPlaying == this.whoPlaysFirst) {
             for (int i = 0; i < Game.BOARD_SIZE; i++) {
                 for (int j = 0; j < Game.BOARD_SIZE; j++) {
-                    Case cas = FrameStart.boardGamePanel.grid[i][j];
+                    Case cas = FrameGame.boardGamePanel.grid[i][j];
                     if (cas.getClan() == 0) {
                         cas.setTroopsNumber(3 * Game.ADD_TROOPS_PER_TURN + cas.getTroopsNumber());
                     } else {
@@ -224,8 +226,8 @@ public class GameMecanics {
         scores[2] = 0;
         for (int i = 0; i < Game.BOARD_SIZE; i++) {
             for (int j = 0; j < Game.BOARD_SIZE; j++) {
-                scores[FrameStart.boardGamePanel.grid[i][j].getClan()]
-                        += (10 + FrameStart.boardGamePanel.grid[i][j].getTroopsNumber());
+                scores[FrameGame.boardGamePanel.grid[i][j].getClan()]
+                        += (10 + FrameGame.boardGamePanel.grid[i][j].getTroopsNumber());
             }
         }
         return scores;
@@ -239,7 +241,8 @@ public class GameMecanics {
             player2 = new PlayerHuman();
         }
     }
-
+    
+    
     // GET, SET
     public String getWhoPlaysFirst() {
         return this.whoPlaysFirst;
@@ -247,6 +250,10 @@ public class GameMecanics {
 
     public int getWhoIsPlayingInt() {
         return this.whoIsPlayingInt;
+    }
+    
+    public void setIsEnemyAi(boolean bool){
+        this.isEnemyAI = bool;
     }
 
 }

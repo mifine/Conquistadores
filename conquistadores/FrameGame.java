@@ -5,27 +5,28 @@ package conquistadores;
  * @author mifine
  */
 import static conquistadores.Game.GROUND_TYPE;
-import conquistadores.GameMecanics;
-import conquistadores.GamePanel;
-import java.awt.*;
-import java.awt.event.*;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Panel.*;
 import java.awt.event.ActionListener.*;
+import java.util.ArrayList;
+import javax.swing.*;
 
-public class FrameStart extends javax.swing.JFrame {
+public class FrameGame extends JFrame {
 
     private Color playerColor;
-    private boolean isEnemyIA;
-    public static Frame frameGame;
+    private boolean isEnemyAI;
+    public static JFrame frameGame;
     public static GamePanel boardGamePanel;
     public static GameMecanics gameMecanics;
 
     /**
      * Creates new form NewJFrame
      */
-    public FrameStart() {
+    public FrameGame() {
         this.playerColor = new Color(102, 102, 255);                            // This is the default color: blue
-        this.isEnemyIA = true;                                                  // By default, play against IA
+        this.isEnemyAI = true;                                                  // By default, play against IA
 
         /*
          * Create and display the form
@@ -41,16 +42,16 @@ public class FrameStart extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        buttonNewGame = new javax.swing.JButton();
-        buttonConsultScores = new javax.swing.JButton();
-        buttonExit = new javax.swing.JButton();
+        buttonNewGame = new JButton();
+        buttonConsultScores = new JButton();
+        buttonExit = new JButton();
         jLabel2 = new javax.swing.JLabel();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuFile = new javax.swing.JMenu();
@@ -58,15 +59,15 @@ public class FrameStart extends javax.swing.JFrame {
         jMenuExit = new javax.swing.JMenuItem();
         jMenuOptions = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
-        jCheckBoxBlue = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxOrange = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxGreen = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxPurple = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxYellow = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxBlue = new JCheckBoxMenuItem();
+        jCheckBoxOrange = new JCheckBoxMenuItem();
+        jCheckBoxGreen = new JCheckBoxMenuItem();
+        jCheckBoxPurple = new JCheckBoxMenuItem();
+        jCheckBoxYellow = new JCheckBoxMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
-        jCheckBoxMenuHuman = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuIA = new javax.swing.JCheckBoxMenuItem();
+        jCheckBoxMenuHuman = new JCheckBoxMenuItem();
+        jCheckBoxMenuIA = new JCheckBoxMenuItem();
         jMenuInformations = new javax.swing.JMenu();
         jMenuScores = new javax.swing.JMenuItem();
         jMenuRules = new javax.swing.JMenuItem();
@@ -338,12 +339,12 @@ public class FrameStart extends javax.swing.JFrame {
 
     private void jCheckBoxMenuHumanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuHumanActionPerformed
         jCheckBoxMenuIA.setSelected(false);
-        this.isEnemyIA = false;
+        this.isEnemyAI = false;
     }//GEN-LAST:event_jCheckBoxMenuHumanActionPerformed
 
     private void jCheckBoxMenuIAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuIAActionPerformed
         jCheckBoxMenuHuman.setSelected(false);
-        this.isEnemyIA = true;
+        this.isEnemyAI = true;
     }//GEN-LAST:event_jCheckBoxMenuIAActionPerformed
 
     private void jMenuRulesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRulesActionPerformed
@@ -375,7 +376,9 @@ public class FrameStart extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonNewGameActionPerformed
 
     private void buttonConsultScoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonConsultScoresActionPerformed
-        // TODO add your handling code here:
+        String highScores = Game.sm.getHighscoreString();
+        System.out.println(highScores);
+        
     }//GEN-LAST:event_buttonConsultScoresActionPerformed
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
@@ -403,16 +406,16 @@ public class FrameStart extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxYellowActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonConsultScores;
-    private javax.swing.JButton buttonExit;
-    private javax.swing.JButton buttonNewGame;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxBlue;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxGreen;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuHuman;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuIA;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxOrange;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxPurple;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxYellow;
+    private JButton buttonConsultScores;
+    private JButton buttonExit;
+    private JButton buttonNewGame;
+    private JCheckBoxMenuItem jCheckBoxBlue;
+    private JCheckBoxMenuItem jCheckBoxGreen;
+    private JCheckBoxMenuItem jCheckBoxMenuHuman;
+    private JCheckBoxMenuItem jCheckBoxMenuIA;
+    private JCheckBoxMenuItem jCheckBoxOrange;
+    private JCheckBoxMenuItem jCheckBoxPurple;
+    private JCheckBoxMenuItem jCheckBoxYellow;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -431,7 +434,7 @@ public class FrameStart extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuRules;
     private javax.swing.JMenuItem jMenuScores;
     private javax.swing.JMenuItem jMenuOptionsConstants;
-    private javax.swing.JPanel jPanel1;
+    private JPanel jPanel1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     // End of variables declaration//GEN-END:variables
@@ -475,19 +478,21 @@ public class FrameStart extends javax.swing.JFrame {
 
     private void launchNewGame() {
 
-        frameGame = new Frame();
+        frameGame = new JFrame();
         gameMecanics = new GameMecanics();
+        gameMecanics.setIsEnemyAi(this.isEnemyAI);
         boardGamePanel = new GamePanel();
- 
+
         frameGame.setTitle("Conquistadors");
         frameGame.setSize(700, 500);
         frameGame.setLocationRelativeTo(null);
-        frameGame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                frameGame.dispose();
-            }
-        });
+        frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        frameGame.addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosing(WindowEvent e) {
+//                frameGame.dispose();
+//            }
+//        });
 
         boardGamePanel.setPlayerColor(this.playerColor);
 
@@ -495,7 +500,7 @@ public class FrameStart extends javax.swing.JFrame {
         frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
         frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
 
-        gameMecanics.setSecondPlayer(this.isEnemyIA);
+        gameMecanics.setSecondPlayer(this.isEnemyAI);
         this.setGroundColors();
 
         boardGamePanel.initGamePanel();

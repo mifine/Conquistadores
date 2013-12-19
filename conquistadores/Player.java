@@ -21,8 +21,8 @@ public abstract class Player {
     public void setCasesClickPossibility(boolean bool){
         for (int i = 0; i < Game.BOARD_SIZE; i++) {
             for (int j = 0; j < Game.BOARD_SIZE; j++) {
-                FrameStart.boardGamePanel.setIsHuman(bool);
-                FrameStart.boardGamePanel.grid[i][j].setIsHuman(bool);
+                FrameGame.boardGamePanel.setIsHuman(bool);
+                FrameGame.boardGamePanel.grid[i][j].setIsHuman(bool);
                 
             }
         }

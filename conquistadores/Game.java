@@ -4,17 +4,21 @@ package conquistadores;
  *
  * @author mifine
  */
-import java.awt.*;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Panel.*;
 import java.awt.event.ActionListener.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Game {
 
-    final static Frame F = new FrameStart();
+    final static FrameGame F = new FrameGame();
 
     //declare game constants 
-    static int MAX_TURN_NUMBER = 10;
+    static int MAX_TURN_NUMBER = 1;
     static int MAX_ACTIONS_PER_TURN = 3;
     static int MAX_TROOPS_PER_CASE = 17;
     static int ADD_TROOPS_PER_TURN = 1;
@@ -25,6 +29,7 @@ public class Game {
     static int GROUND_TYPE = 1;
     static String PLACEMENT = "random";                                   // random or normal
     final static Color[] GROUND_COLOR = new Color[5];
+    static public ScoreManager sm;
 
     public static void main(String[] arg) {
 
@@ -41,6 +46,9 @@ public class Game {
     }
 
     public Game() {
+      //  new GameEngine();
+        sm = new ScoreManager();
+        
         F.setTitle("Conquistadors");
         F.setSize(600, 400);
         F.setLocationRelativeTo(null);
@@ -48,6 +56,7 @@ public class Game {
         F.setLayout(new BorderLayout());
         F.setResizable(false);
         F.show();
+        
     }
 
 }

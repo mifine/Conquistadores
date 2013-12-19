@@ -97,7 +97,7 @@ public class GamePanel extends JPanel {
      * Populate North JPanel with Turn number - Player or Enemy Turn
      */
     public void populateNorthPanel() {
-        String whoPlays = FrameStart.gameMecanics.getWhoPlaysFirst();
+        String whoPlays = FrameGame.gameMecanics.getWhoPlaysFirst();
         JLabel turnLabel = new JLabel("Turn 1 - " + whoPlays + "'s turn");
         turnLabel.setFont(new Font("Verdana", 1, 20));
         this.north.add(turnLabel);
@@ -143,8 +143,8 @@ public class GamePanel extends JPanel {
      */
     private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned(0)) {
-            if (FrameStart.gameMecanics.resolveAttack(this.caseOrigin, this.caseDestination)) {
-                FrameStart.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
+            if (FrameGame.gameMecanics.resolveAttack(this.caseOrigin, this.caseDestination)) {
+                FrameGame.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
             }
         }
 
@@ -155,8 +155,8 @@ public class GamePanel extends JPanel {
      */
     private void buttonSendActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned(1)) {
-            if (FrameStart.gameMecanics.resolveSend(this.caseOrigin, this.caseDestination)) {
-                FrameStart.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
+            if (FrameGame.gameMecanics.resolveSend(this.caseOrigin, this.caseDestination)) {
+                FrameGame.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
             }
         }
     }
@@ -282,7 +282,7 @@ public class GamePanel extends JPanel {
             @Override
             public void windowClosing(WindowEvent e) {
                 alert.dispose();
-                FrameStart.frameGame.dispose();
+                FrameGame.frameGame.dispose();
             }
         });
         alert.show();
