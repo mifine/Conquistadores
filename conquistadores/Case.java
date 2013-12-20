@@ -34,9 +34,14 @@ public class Case extends JPanel implements MouseListener {
     public void paint(Graphics g) {
         super.paint(g);
         int xnb, ynb = 52 * 5 / Game.BOARD_SIZE;
-        int x = 15 * 5 / Game.BOARD_SIZE, y = 15 * 5 / Game.BOARD_SIZE, width = 106 * 5 / Game.BOARD_SIZE, height = 48 * 5 / Game.BOARD_SIZE, arcWidth = 10, ArcHeight = 10;
+        int x = 26 * 5 / Game.BOARD_SIZE;
+        int y = 15 * 5 / Game.BOARD_SIZE;
+        int width = 76 * 5 / Game.BOARD_SIZE;
+        int height = 48 * 5 / Game.BOARD_SIZE;
+        int arcWidth = 10;
+        int arcHeight = 10;
         g.setColor(this.clanColor);
-        g.fillRoundRect(x, y, width, height, arcWidth, ArcHeight);
+        g.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
         g.setColor(this.clanColor.darker().darker());
         g.setFont(new Font("Verdana", 1, 40 * 5 / Game.BOARD_SIZE));
         if (this.troopsNumber < 10) {
@@ -61,7 +66,7 @@ public class Case extends JPanel implements MouseListener {
         if (this.isHuman) {
             int nbCasesSelectedBeforeClick = this.nbCasesSelected;
 
-            if (!(this.clan != FrameGame.gameMecanics.getWhoIsPlayingInt() && nbCasesSelectedBeforeClick == 0)) {
+            if (!(this.clan != Game.GM.gameMecanics.getWhoIsPlayingInt() && nbCasesSelectedBeforeClick == 0)) {
 
                 if (this.isSelected && this.caseSelected[this.posx][this.posy] == 1 && nbCasesSelectedBeforeClick == 1
                         || this.isSelected && this.caseSelected[this.posx][this.posy] == 2) {
@@ -106,7 +111,7 @@ public class Case extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         if (this.isHuman) {
             // no case is selected yet : the player can select any of his cases
-            if (this.nbCasesSelected == 0 && this.clan == FrameGame.gameMecanics.getWhoIsPlayingInt()) {
+            if (this.nbCasesSelected == 0 && this.clan == Game.GM.gameMecanics.getWhoIsPlayingInt()) {
                 this.setBackground(Color.LIGHT_GRAY);
                 this.canBeSelected = true;
             } // one case is already selected, can be selected only if the neighbour case has been selected

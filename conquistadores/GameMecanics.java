@@ -19,16 +19,17 @@ public class GameMecanics {
     private int whoIsPlayingInt;
     private int[] finalScore = new int[3];
     public boolean isEnemyAI;
+    final private int gameLevel;
 
     public int turnNumber = 1;
     public int actionNumber = 1;
 
-    public GameMecanics() {
+    public GameMecanics(int level) {
         double rand = Math.random();
         this.whoPlaysFirst = (rand < 0.5) ? "Player 1" : "Player 2";
         player1 = new PlayerHuman();
-//        player1 = new PlayerAI();
-//        player1.setLevel(Game.AI_LEVEL);
+        this.gameLevel = level;
+        Game.GM.loadGameParameters();
     }
 
     /*
@@ -88,13 +89,13 @@ public class GameMecanics {
         int originTroops = caseOrigin.getTroopsNumber();
         int troopsSent = originTroops - 1;
 
-        if (troopsSent > 0 && destinationTroops < (Game.MAX_TROOPS_PER_CASE + (int)(this.turnNumber-1)/2 - 1)) {
-            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE + (int)(this.turnNumber-1)/2) {
+        if (troopsSent > 0 && destinationTroops < (Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2 - 1)) {
+            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2) {
                 caseOrigin.setTroopsNumber(originTroops - troopsSent);
                 caseDestination.setTroopsNumber(destinationTroops + troopsSent);
             } else {
-                caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE - (int)(this.turnNumber-1)/2 + 2 + destinationTroops);
-                caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE + (int)(this.turnNumber-1)/2);
+                caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE - (int) (this.turnNumber - 1) / 2 + 2 + destinationTroops);
+                caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2);
             }
             sendTroops = true;
         } else {
@@ -118,7 +119,7 @@ public class GameMecanics {
             alea = 2;
         } else if (rand >= 0.85 && rand < 0.90) {
             alea = 3;
-        } 
+        }
         return alea;
     }
 
@@ -144,7 +145,7 @@ public class GameMecanics {
     /*
      * Close an action turn
      */
-    public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isAI ) {
+    public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isAI) {
         if (!isAI) {
             FrameGame.boardGamePanel.closeActionTurn(caseOrigin, caseDestination);
         } else {
@@ -165,40 +166,56 @@ public class GameMecanics {
     public void closeTurn() {
         this.setCurrentPlayer((this.whoIsPlaying == "Player 1") ? 2 : 1);
 
+        // update the Game panel with the indication of who's turn it is
         if (this.turnNumber < Game.MAX_TURN_NUMBER * 2) {
             FrameGame.boardGamePanel.updateNorthPanel((int) (this.turnNumber) / 2 + 1, this.whoIsPlaying);
-
         }
         this.turnNumber++;
         this.actionNumber = 1;
 
+        // END GAME
         if (this.turnNumber > Game.MAX_TURN_NUMBER * 2 && this.whoIsPlaying == this.whoPlaysFirst) {
-            try {
-                Thread.sleep(500);
-                finalScore = this.countScores();
-                FrameGame.boardGamePanel.showFinalScore(finalScore[1], finalScore[2]);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
-            Game.sm.writeScore(finalScore[1], finalScore[2], this.isEnemyAI);
+            endGame();
         }
 
-        // at the end of each turn, increase the number of troops per case. +X for Players, +2X for Natives. 
+        // END TURN
         if (this.whoIsPlaying == this.whoPlaysFirst) {
-            for (int i = 0; i < Game.BOARD_SIZE; i++) {
-                for (int j = 0; j < Game.BOARD_SIZE; j++) {
-                    Case cas = FrameGame.boardGamePanel.grid[i][j];
-                    if (cas.getClan() == 0) {
-                        cas.setTroopsNumber(3 * Game.ADD_TROOPS_PER_TURN + cas.getTroopsNumber());
-                    } else {
-                        cas.setTroopsNumber(Game.ADD_TROOPS_PER_TURN + cas.getTroopsNumber());
-                    }
-                    cas.repaint();
-                }
-            }
+            endTurn();
         }
 
         this.currentPlayer.playTurn();
+    }
+
+    /*
+     * the level is finished, we can close the game Window and save the score
+     */
+    public void endGame() {
+        try {
+            Thread.sleep(500);
+            finalScore = this.countScores();
+            Game.FG.showEndGame(finalScore[1], finalScore[2]);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        Game.SM.writeScore(finalScore[1], finalScore[2], this.isEnemyAI, this.gameLevel);
+    }
+
+    /*
+     * the turn is finished, increase the number of troops per case. +X for
+     * Players, +2X for Natives.
+     */
+    public void endTurn() {
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
+                Case cas = FrameGame.boardGamePanel.grid[i][j];
+                if (cas.getClan() == 0) {
+                    cas.setTroopsNumber(3 * Game.ADD_TROOPS_PER_TURN + cas.getTroopsNumber());
+                } else {
+                    cas.setTroopsNumber(Game.ADD_TROOPS_PER_TURN + cas.getTroopsNumber());
+                }
+                cas.repaint();
+            }
+        }
     }
 
     public void setCurrentPlayer(int player) {
@@ -241,8 +258,7 @@ public class GameMecanics {
             player2 = new PlayerHuman();
         }
     }
-    
-    
+
     // GET, SET
     public String getWhoPlaysFirst() {
         return this.whoPlaysFirst;
@@ -251,9 +267,23 @@ public class GameMecanics {
     public int getWhoIsPlayingInt() {
         return this.whoIsPlayingInt;
     }
-    
-    public void setIsEnemyAi(boolean bool){
+
+    public void setIsEnemyAi(boolean bool) {
         this.isEnemyAI = bool;
+    }
+
+    public void setGameParameters(String params) {
+        String[] p = params.split(" ");
+        Game.MAX_TURN_NUMBER = Integer.parseInt(p[0]);
+        Game.MAX_ACTIONS_PER_TURN = Integer.parseInt(p[1]);
+        Game.MAX_TROOPS_PER_CASE = Integer.parseInt(p[2]);
+        Game.ADD_TROOPS_PER_TURN = Integer.parseInt(p[3]);
+        Game.BOARD_SIZE = Integer.parseInt(p[4]);
+        Game.INITIAL_TROOPS_NATIVE = Integer.parseInt(p[5]);
+        Game.INITIAL_TROOPS_PLAYER = Integer.parseInt(p[6]);
+        Game.AI_LEVEL = Integer.parseInt(p[7]);
+        Game.GROUND_TYPE = Integer.parseInt(p[8]);
+        Game.PLACEMENT = Integer.parseInt(p[9]);
     }
 
 }

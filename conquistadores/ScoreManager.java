@@ -25,35 +25,38 @@ import java.util.Date;
  */
 public class ScoreManager {
 
-    private static final String SCORE_FILE = "scores.txt";
-
     public ScoreManager() {
-
     }
 
     public String[] getHighscores() {
-        
+
         int maxHighScore = 9;
         ArrayList<Score> scores;
         scores = getScores();
+        if (scores != null) {
         int max = Math.min(maxHighScore, scores.size());
         int i = 0;
         String[] highscores = new String[max];
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        
+
         while (i < max) {
             Date date = new Date(scores.get(i).getTime());
-            highscores[i] = (i + 1) + ".    " + dateFormat.format(date) + "   -   Player 1 : " + scores.get(i).getScore1() + "  -   Player 2 ("+ (scores.get(i).getIsAI()==1 ? "AI" : "Human")  +") : " + scores.get(i).getScore2() + "   -   Board Size: " + scores.get(i).getBoardSize() + "\n";
-           i++;
+            highscores[i] = (i + 1) + ".          " + dateFormat.format(date) + "   -   Player 1 : " + scores.get(i).getScore1() + "  -   Player 2 (" + (scores.get(i).getIsAI() == 1 ? "AI" : "Human") + ") : " + scores.get(i).getScore2() + "   -   Level: " + scores.get(i).getLevel() + "\n";
+            i++;
         }
-        return highscores;
+        return highscores;}
+        else return null;
     }
 
     public ArrayList<Score> getScores() {
         ArrayList<Score> scores = new ArrayList();
         scores = loadScoreFile();
-        scores = sort(scores);
-        return scores;
+        if (scores != null) {
+            scores = sort(scores);
+            return scores;
+        } else {
+            return null;
+        }
     }
 
     /*
@@ -63,21 +66,25 @@ public class ScoreManager {
         ArrayList<Score> scores = new ArrayList();
         ArrayList scoresString = this.readScore();
         String scoreLine;
-        int max = scoresString.size();
-        for (int i = 0; i < max; i++) {
-            scoreLine = scoresString.get(i).toString();
-            String[] elts = scoreLine.split(" ");
+        if (scoresString != null) {
+            int max = scoresString.size();
+            for (int i = 0; i < max; i++) {
+                scoreLine = scoresString.get(i).toString();
+                String[] elts = scoreLine.split(" ");
 
-            Score sc = new Score(
-                    Long.parseLong(elts[0]),
-                    Integer.parseInt(elts[1]),
-                    Integer.parseInt(elts[2]),
-                    Integer.parseInt(elts[3]),
-                    Integer.parseInt(elts[4])
-            );
-            scores.add(sc);
+                Score sc = new Score(
+                        Long.parseLong(elts[0]),
+                        Integer.parseInt(elts[1]),
+                        Integer.parseInt(elts[2]),
+                        Integer.parseInt(elts[3]),
+                        Integer.parseInt(elts[4])
+                );
+                scores.add(sc);
+            }
+            return scores;
+        } else {
+            return null;
         }
-        return scores;
     }
 
     /*
@@ -87,8 +94,7 @@ public class ScoreManager {
         ArrayList scores = new ArrayList();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new FileReader(SCORE_FILE));
-            StringBuilder sb = new StringBuilder();
+            br = new BufferedReader(new FileReader(Game.SCORE_FILE));
             String line = br.readLine();
             while (line != null) {
                 scores.add(line);
@@ -99,7 +105,9 @@ public class ScoreManager {
             return null;
         } finally {
             try {
-                br.close();
+                if (br != null) {
+                    br.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -109,10 +117,10 @@ public class ScoreManager {
     /*
      * Write the new score line to the SCORE_FILE
      */
-    public void writeScore(int player1Score, int player2Score, boolean isEnemyAI) {
-        File file = new File(SCORE_FILE);
+    public void writeScore(int player1Score, int player2Score, boolean isEnemyAI, int gameLevel) {
+        File file = new File(Game.SCORE_FILE);
         Date today = new Date();
-        String score = today.getTime() + " " + player1Score + " " + player2Score + " " + (isEnemyAI ? "1" : "0") + " " + Game.BOARD_SIZE;
+        String score = today.getTime() + " " + player1Score + " " + player2Score + " " + (isEnemyAI ? "1" : "0") + " " + gameLevel;
         PrintWriter pw = null;
         try {
             FileWriter fw = new FileWriter(file, true);

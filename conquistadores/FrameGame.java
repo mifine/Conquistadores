@@ -8,7 +8,6 @@ import static conquistadores.Game.GROUND_TYPE;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.Panel.*;
 import java.awt.event.ActionListener.*;
@@ -20,7 +19,8 @@ public class FrameGame extends JFrame {
     private boolean isEnemyAI;
     public static JFrame frameGame;
     public static GamePanel boardGamePanel;
-    public static GameMecanics gameMecanics;
+    //public static GameMecanics gameMecanics;
+    public static EndGameFrame endGameFrame;
 
     /**
      * Creates new form NewJFrame
@@ -44,50 +44,47 @@ public class FrameGame extends JFrame {
     private void initComponents() {
 
         jPanel1 = new JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        jLabel1 = new JLabel();
+        jLabel4 = new JLabel();
+        jLabel3 = new JLabel();
+        jLabel5 = new JLabel();
+        jLabel6 = new JLabel();
+        jLabel7 = new JLabel();
         buttonNewGame = new JButton();
         buttonConsultScores = new JButton();
         buttonExit = new JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jMenuBar = new javax.swing.JMenuBar();
-        jMenuFile = new javax.swing.JMenu();
-        jMenuNewGame = new javax.swing.JMenuItem();
-        jMenuExit = new javax.swing.JMenuItem();
-        jMenuOptions = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
+        jLabel2 = new JLabel();
+        jMenuBar = new JMenuBar();
+        jMenuFile = new JMenu();
+        jMenuNewGame = new JMenuItem();
+        jMenuLoadGame = new JMenuItem();
+        jMenuExit = new JMenuItem();
+        jMenuOptions = new JMenu();
+        jMenu1 = new JMenu();
         jCheckBoxBlue = new JCheckBoxMenuItem();
         jCheckBoxOrange = new JCheckBoxMenuItem();
         jCheckBoxGreen = new JCheckBoxMenuItem();
         jCheckBoxPurple = new JCheckBoxMenuItem();
         jCheckBoxYellow = new JCheckBoxMenuItem();
-        jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jSeparator1 = new JPopupMenu.Separator();
+        jSeparator2 = new JPopupMenu.Separator();
         jCheckBoxMenuHuman = new JCheckBoxMenuItem();
         jCheckBoxMenuIA = new JCheckBoxMenuItem();
-        jMenuInformations = new javax.swing.JMenu();
-        jMenuScores = new javax.swing.JMenuItem();
-        jMenuRules = new javax.swing.JMenuItem();
-        jMenuAbout = new javax.swing.JMenuItem();
-        jMenuOptionsConstants = new javax.swing.JMenuItem();
+        jMenuInformations = new JMenu();
+        jMenuScores = new JMenuItem();
+        jMenuRules = new JMenuItem();
+        jMenuAbout = new JMenuItem();
+        jMenuOptionsConstants = new JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Welcome to Conquistadores, an epic conquest game. ");
-
-        jLabel4.setText("You arrive on a new island at the same time as your worst ennemy.");
-
+        jLabel2.setText("Copyright mifine @2013-2014");
         jLabel3.setText("The island is already inhabited by some pacifist native people.");
-
+        jLabel4.setText("You arrive on a new island at the same time as your worst ennemy.");
         jLabel5.setText("Your goal is to prevent your opponent to expand and conquier more areas.");
-
         jLabel6.setText("If you can spare some native people lives, that will be nice as well ");
-
         jLabel7.setText("(but you will not gain any bonus for that).");
 
         buttonNewGame.setText("Start new game");
@@ -112,57 +109,55 @@ public class FrameGame extends JFrame {
             }
         });
 
-        jLabel2.setText("Copyright mifine @2013-2014");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(55, 55, 55)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(buttonNewGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(buttonConsultScores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addComponent(buttonNewGame, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(buttonConsultScores, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(buttonExit, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(19, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                 .addComponent(jLabel7)
                                                 .addComponent(jLabel6)
                                                 .addComponent(jLabel5)
                                                 .addComponent(jLabel3)
                                                 .addComponent(jLabel4))
                                         .addGap(84, 84, 84))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                 .addComponent(jLabel1)
                                                 .addComponent(jLabel2))
                                         .addGap(35, 35, 35))))
         );
         jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(buttonNewGame)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonConsultScores)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(buttonExit, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addGap(16, 16, 16)
                         .addComponent(jLabel2)
                         .addContainerGap())
@@ -170,17 +165,26 @@ public class FrameGame extends JFrame {
 
         jMenuFile.setText("File");
 
-        jMenuNewGame.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuNewGame.setText("New Game");
+        jMenuNewGame.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuNewGame.setText("Start new game");
         jMenuNewGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuNewGameActionPerformed(evt);
+                jMenuNewGameLevel1ActionPerformed(evt);
             }
         });
         jMenuFile.add(jMenuNewGame);
 
-        jMenuExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuExit.setText("Exit game");
+        jMenuLoadGame.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuLoadGame.setText("Load game");
+        jMenuLoadGame.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuLoadGameActionPerformed(evt);
+            }
+        });
+        jMenuFile.add(jMenuLoadGame);
+        
+        jMenuExit.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuExit.setText("Exit");
         jMenuExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuExitActionPerformed(evt);
@@ -189,14 +193,12 @@ public class FrameGame extends JFrame {
         jMenuFile.add(jMenuExit);
 
         jMenuBar.add(jMenuFile);
-
         jMenuOptions.setText("Options");
-
         jMenu1.setText("Change player color");
 
         jCheckBoxBlue.setSelected(true);
         jCheckBoxBlue.setText("Blue");
-        jCheckBoxBlue.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/blue.jpg"))); // NOI18N
+        jCheckBoxBlue.setIcon(new ImageIcon(getClass().getResource("/images/blue.jpg"))); // NOI18N
         jCheckBoxBlue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxBlueActionPerformed(evt);
@@ -205,7 +207,7 @@ public class FrameGame extends JFrame {
         jMenu1.add(jCheckBoxBlue);
 
         jCheckBoxOrange.setText("Orange");
-        jCheckBoxOrange.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/orange.jpg"))); // NOI18N
+        jCheckBoxOrange.setIcon(new ImageIcon(getClass().getResource("/images/orange.jpg"))); // NOI18N
         jCheckBoxOrange.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxOrangeActionPerformed(evt);
@@ -214,7 +216,7 @@ public class FrameGame extends JFrame {
         jMenu1.add(jCheckBoxOrange);
 
         jCheckBoxGreen.setText("Green");
-        jCheckBoxGreen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/green.jpg"))); // NOI18N
+        jCheckBoxGreen.setIcon(new ImageIcon(getClass().getResource("/images/green.jpg"))); // NOI18N
         jCheckBoxGreen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxGreenActionPerformed(evt);
@@ -223,7 +225,7 @@ public class FrameGame extends JFrame {
         jMenu1.add(jCheckBoxGreen);
 
         jCheckBoxPurple.setText("Purple");
-        jCheckBoxPurple.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/purple.jpg"))); // NOI18N
+        jCheckBoxPurple.setIcon(new ImageIcon(getClass().getResource("/images/purple.jpg"))); // NOI18N
         jCheckBoxPurple.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxPurpleActionPerformed(evt);
@@ -232,7 +234,7 @@ public class FrameGame extends JFrame {
         jMenu1.add(jCheckBoxPurple);
 
         jCheckBoxYellow.setText("Yellow");
-        jCheckBoxYellow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/yellow.jpg"))); // NOI18N
+        jCheckBoxYellow.setIcon(new ImageIcon(getClass().getResource("/images/yellow.jpg"))); // NOI18N
         jCheckBoxYellow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxYellowActionPerformed(evt);
@@ -302,24 +304,24 @@ public class FrameGame extends JFrame {
 
         setJMenuBar(jMenuBar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGap(0, 592, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGap(0, 415, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -330,12 +332,13 @@ public class FrameGame extends JFrame {
         System.exit(0);
     }//GEN-LAST:event_jMenuExitActionPerformed
 
-    private void jMenuNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewGameActionPerformed
-        this.launchNewGame();
+    private void jMenuNewGameLevel1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuNewGameActionPerformed
+        Game.GM.launchLevel(1);
     }//GEN-LAST:event_jMenuNewGameActionPerformed
 
     private void jMenuScoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuScoresActionPerformed
-        // TODO add your handling code here:
+        String[] highScores = Game.SM.getHighscores();
+        this.showHighScores(highScores, 500, 400);
     }//GEN-LAST:event_jMenuScoresActionPerformed
 
     private void jCheckBoxMenuHumanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxMenuHumanActionPerformed
@@ -373,11 +376,16 @@ public class FrameGame extends JFrame {
     }//GEN-LAST:event_jMenuAboutActionPerformed
 
     private void buttonNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewGameActionPerformed
-        this.launchNewGame();
+        Game.GM.launchLevel(1);
     }//GEN-LAST:event_buttonNewGameActionPerformed
 
+    private void jMenuLoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewGameActionPerformed
+        Game.GM.launchLevel(1);
+    }//GEN-LAST:event_buttonNewGameActionPerformed
+    
+    
     private void buttonConsultScoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonConsultScoresActionPerformed
-        String[] highScores = Game.sm.getHighscores();
+        String[] highScores = Game.SM.getHighscores();
         this.showHighScores(highScores, 500, 400);
 
     }//GEN-LAST:event_buttonConsultScoresActionPerformed
@@ -417,27 +425,28 @@ public class FrameGame extends JFrame {
     private JCheckBoxMenuItem jCheckBoxOrange;
     private JCheckBoxMenuItem jCheckBoxPurple;
     private JCheckBoxMenuItem jCheckBoxYellow;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuAbout;
-    private javax.swing.JMenuBar jMenuBar;
-    private javax.swing.JMenuItem jMenuExit;
-    private javax.swing.JMenu jMenuFile;
-    private javax.swing.JMenu jMenuInformations;
-    private javax.swing.JMenuItem jMenuNewGame;
-    private javax.swing.JMenu jMenuOptions;
-    private javax.swing.JMenuItem jMenuRules;
-    private javax.swing.JMenuItem jMenuScores;
-    private javax.swing.JMenuItem jMenuOptionsConstants;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JLabel jLabel7;
+    private JMenu jMenu1;
+    private JMenuItem jMenuAbout;
+    private JMenuBar jMenuBar;
+    private JMenuItem jMenuExit;
+    private JMenu jMenuFile;
+    private JMenu jMenuInformations;
+    private JMenuItem jMenuNewGame;
+    private JMenuItem jMenuLoadGame;
+    private JMenu jMenuOptions;
+    private JMenuItem jMenuRules;
+    private JMenuItem jMenuScores;
+    private JMenuItem jMenuOptionsConstants;
     private JPanel jPanel1;
-    private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JPopupMenu.Separator jSeparator2;
+    private JPopupMenu.Separator jSeparator1;
+    private JPopupMenu.Separator jSeparator2;
     // End of variables declaration//GEN-END:variables
 
     private void changePlayerColor(String color) {
@@ -477,11 +486,11 @@ public class FrameGame extends JFrame {
 
     }
 
-    private void launchNewGame() {
+    private void launchNewGame(int level) {
 
         frameGame = new JFrame();
-        gameMecanics = new GameMecanics();
-        gameMecanics.setIsEnemyAi(this.isEnemyAI);
+      //  gameMecanics = new GameMecanics(level);
+      //  gameMecanics.setIsEnemyAi(this.isEnemyAI);
         boardGamePanel = new GamePanel();
 
         frameGame.setTitle("Conquistadors");
@@ -495,16 +504,35 @@ public class FrameGame extends JFrame {
         frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
         frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
 
-        gameMecanics.setSecondPlayer(this.isEnemyAI);
+      //  gameMecanics.setSecondPlayer(this.isEnemyAI);
         this.setGroundColors();
 
         boardGamePanel.initGamePanel();
 
         frameGame.show();
-        gameMecanics.startGame();
+      //  gameMecanics.startGame();
 
     }
 
+     public void startNewLevel(int level) {
+
+        frameGame = new JFrame();
+        boardGamePanel = new GamePanel();
+        
+        frameGame.setTitle("Conquistadors - niveau " + level);
+        frameGame.setSize(700, 500);
+        frameGame.setLocationRelativeTo(null);
+        frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        boardGamePanel.setPlayerColor(this.playerColor);
+        frameGame.add(boardGamePanel.board, BorderLayout.CENTER);
+        frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
+        frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
+        this.setGroundColors();
+        boardGamePanel.initGamePanel();
+        frameGame.show();
+     }
+     
+     
     private static void setGroundColors() {
         if (Game.GROUND_TYPE == 1) {
             Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.DARK_GRAY;
@@ -522,25 +550,37 @@ public class FrameGame extends JFrame {
      * to a lack of troops, ...
      */
     public void showHighScores(String[] highscores, int xsize, int ysize) {
-        JFrame alert = new JFrame();
-        int size = highscores.length;
-
-        alert.setTitle("Conquistadors - High scores");
-        alert.setSize(xsize, ysize);
-
+        JFrame frame = new JFrame();
         JPanel centerP = new JPanel();
-        centerP.setLayout(new GridLayout(size + 2, 1));
-        for (int i = 0; i < size; i++) {
-            centerP.add(new JLabel(highscores[size - i - 1]), JLabel.CENTER);
+        frame.setTitle("Conquistadors - High scores");
+        frame.setSize(xsize, ysize);
+        centerP.setLayout(new GridLayout(11, 1));
+        
+        if (highscores != null) {
+            int size = highscores.length;
+            
+            for (int i = 0; i < size; i++) {
+                centerP.add(new JLabel(highscores[size - i - 1]), JLabel.CENTER);
+            }
+        } else {
+           centerP.add(new JLabel("                                                          Pas encore de scores !"), JLabel.CENTER);
         }
         centerP.add(new JLabel("************************************     High Scores     ************************************"), JLabel.CENTER);
 
-        alert.add(new JLabel("    "), BorderLayout.WEST);
-        alert.add(centerP, BorderLayout.CENTER);
-
-        alert.setLocationRelativeTo(null);
-        alert.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        alert.show();
+        frame.add(new JLabel("    "), BorderLayout.WEST);
+        frame.add(centerP, BorderLayout.CENTER);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.show();
+    }
+    
+    /*
+     * Show end game frame
+     */
+    public void showEndGame(int sc1, int sc2) {
+       
+        endGameFrame = new EndGameFrame(sc1, sc2);
+        
     }
 
 }

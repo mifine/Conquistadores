@@ -4,7 +4,6 @@ package conquistadores;
  *
  * @author mifine
  */
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionListener.*;
@@ -15,7 +14,9 @@ import java.util.ArrayList;
 
 public class Game {
 
-    final static FrameGame F = new FrameGame();
+    final static FrameGame FG = new FrameGame();
+    final static ScoreManager SM = new ScoreManager();
+    final static GameManager GM = new GameManager();
 
     //declare game constants 
     static int MAX_TURN_NUMBER = 1;
@@ -27,9 +28,10 @@ public class Game {
     static int INITIAL_TROOPS_PLAYER = 11;
     static int AI_LEVEL = 0;
     static int GROUND_TYPE = 1;
-    static String PLACEMENT = "random";                                   // random or normal
+    static int PLACEMENT = 1;                                   // random=0 or normal=1
     final static Color[] GROUND_COLOR = new Color[5];
-    static public ScoreManager sm;
+    final static String SCORE_FILE = "scores.txt";
+    final static String PARAMS_FILE = "gameParameters.dat";
 
     public static void main(String[] arg) {
 
@@ -38,25 +40,17 @@ public class Game {
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Game();
-                //new NewJFramegger().setVisible(true);
+                
+                FG.setTitle("Conquistadors");
+                FG.setSize(600, 400);
+                FG.setLocationRelativeTo(null);
+                FG.setBackground(Color.lightGray);
+                FG.setLayout(new BorderLayout());
+                FG.setResizable(false);
+                FG.show();
+                 
             }
         });
-
-    }
-
-    public Game() {
-      //  new GameEngine();
-        sm = new ScoreManager();
-        
-        F.setTitle("Conquistadors");
-        F.setSize(600, 400);
-        F.setLocationRelativeTo(null);
-        F.setBackground(Color.lightGray);
-        F.setLayout(new BorderLayout());
-        F.setResizable(false);
-        F.show();
-        
     }
 
 }

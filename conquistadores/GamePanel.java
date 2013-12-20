@@ -46,7 +46,7 @@ public class GamePanel extends JPanel {
         // Build the first grid to play
         for (int i = 0; i < Game.BOARD_SIZE; i++) {
             for (int j = 0; j < Game.BOARD_SIZE; j++) {
-                if (Game.PLACEMENT == "random") {
+                if (Game.PLACEMENT == 0) {
                     int r = this.getRandomNb(5);
                     this.placeGrid(r, i, j, 2);
                 } else {
@@ -97,7 +97,7 @@ public class GamePanel extends JPanel {
      * Populate North JPanel with Turn number - Player or Enemy Turn
      */
     public void populateNorthPanel() {
-        String whoPlays = FrameGame.gameMecanics.getWhoPlaysFirst();
+        String whoPlays = Game.GM.gameMecanics.getWhoPlaysFirst();
         JLabel turnLabel = new JLabel("Turn 1 - " + whoPlays + "'s turn");
         turnLabel.setFont(new Font("Verdana", 1, 20));
         this.north.add(turnLabel);
@@ -143,8 +143,8 @@ public class GamePanel extends JPanel {
      */
     private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned(0)) {
-            if (FrameGame.gameMecanics.resolveAttack(this.caseOrigin, this.caseDestination)) {
-                FrameGame.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
+            if (Game.GM.gameMecanics.resolveAttack(this.caseOrigin, this.caseDestination)) {
+                Game.GM.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
             }
         }
 
@@ -155,8 +155,8 @@ public class GamePanel extends JPanel {
      */
     private void buttonSendActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned(1)) {
-            if (FrameGame.gameMecanics.resolveSend(this.caseOrigin, this.caseDestination)) {
-                FrameGame.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
+            if (Game.GM.gameMecanics.resolveSend(this.caseOrigin, this.caseDestination)) {
+                Game.GM.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
             }
         }
     }
@@ -247,14 +247,12 @@ public class GamePanel extends JPanel {
         alert.add(alertLabel);
         alert.setLocationRelativeTo(null);
         alert.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
         alert.show();
     }
-    
+
     /*
      * Close an action turn
      */
-
     public void closeActionTurn(Case origin, Case destination) {
         origin.initialize();
         destination.initialize();
@@ -263,28 +261,11 @@ public class GamePanel extends JPanel {
         destination.repaint();
     }
 
+    
+    
     /*
-     * Send a message alert to the player if an action can not be performed due
-     * to a lack of troops, ...
+     * GET, SET
      */
-    public void showFinalScore(int score1, int score2) {
-        final Frame alert = new Frame();
-        JLabel playerScoreLabel = new JLabel("Scores: Player 1 = " + score1 + " / Player 2 = " + score2);
-        alert.setTitle("Conquistadors");
-        alert.setSize(250, 90);
-        alert.add(playerScoreLabel);
-        alert.setLocationRelativeTo(null);
-        alert.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                alert.dispose();
-                FrameGame.frameGame.dispose();
-            }
-        });
-        alert.show();
-    }
-
-    // GET, SET
     public Case getCaseOrigin() {
         return this.caseOrigin;
     }

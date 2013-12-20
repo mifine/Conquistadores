@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class PlayerAI extends Player {
 
     private int level;                       // level = 0 : "random", 1 : "easy", 2 : "normal" or 3 : "difficult"
-    Case caseOrigin;
-    Case caseDestination;
+    private Case caseOrigin;
+    private Case caseDestination;
 
     @Override
     public void playTurn() {
@@ -39,7 +39,7 @@ public class PlayerAI extends Player {
                 this.playEasy();
                 break;
             case 2:
-                this.playNormal();
+                this.playMedium();
                 break;
             case 3:
                 this.playAdvanced();
@@ -72,7 +72,7 @@ public class PlayerAI extends Player {
 
         for (int i = 0; i < Game.BOARD_SIZE; i++) {
             for (int j = 0; j < Game.BOARD_SIZE; j++) {
-                boardCase[i][j] = FrameStart.boardGamePanel.grid[i][j];
+                boardCase[i][j] = FrameGame.boardGamePanel.grid[i][j];
                 if (boardCase[i][j].getClan() == 2) {
                     aiCases.add(boardCase[i][j]);
                 }
@@ -91,7 +91,7 @@ public class PlayerAI extends Player {
                     caseOrigin = aiCases.get(origin);
                 } while (caseOrigin.getTroopsNumber() == 1);
                 neighbours = caseOrigin.getNeighbours();
-                if (Game.PLACEMENT == "normal") {
+                if (Game.PLACEMENT == 1) {
                     if (neighbours[1] == null) {
                         do {
                             rand = this.getRandomNb(4);
@@ -111,9 +111,9 @@ public class PlayerAI extends Player {
                 caseDestination.updateBackgroundDisplay();
                 if (caseOrigin.getTroopsNumber() > 1) {
                     if (caseOrigin.getClan() == caseDestination.getClan()) {
-                        result = FrameStart.gameMecanics.resolveSend(caseOrigin, caseDestination);
+                        result = Game.GM.gameMecanics.resolveSend(caseOrigin, caseDestination);
                     } else {
-                        result = FrameStart.gameMecanics.resolveAttack(caseOrigin, caseDestination);
+                        result = Game.GM.gameMecanics.resolveAttack(caseOrigin, caseDestination);
                     }
                     if (!result) {
                         this.caseOrigin.initialize();
@@ -143,7 +143,7 @@ public class PlayerAI extends Player {
     /*
      * Gameplay for a normal IA
      */
-    public void playNormal() {
+    public void playMedium() {
 
     }
 
@@ -158,18 +158,23 @@ public class PlayerAI extends Player {
      * Close the action turn for IA
      */
     public void closeActionTurn() {
-        FrameStart.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
+        Game.GM.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
     }
 
     /*
      * Returns a random number between 0 and max-1 @returns int
      */
-    public int getRandomNb(int max) {
+    private int getRandomNb(int max) {
         return (int) (Math.random() * max);
     }
 
     @Override
     public String whoAmI() {
         return "AI";
+    }
+    
+       // GET, SET
+    public void setLevel(int lvl) {
+        this.level = lvl;
     }
 }

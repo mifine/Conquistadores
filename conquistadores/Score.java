@@ -13,18 +13,18 @@ import java.io.Serializable;
  */
 public class Score implements Serializable {
 
-    private long time;
-    private int score1;
-    private int score2;
-    private int isEnemyAI;
-    private int boardSize;
+    final private long time;
+    final private int score1;
+    final private int score2;
+    final private int isEnemyAI;
+    final private int level;
 
-    public Score(long t, int S1, int S2, int isAI, int b) {
+    public Score(long t, int S1, int S2, int isAI, int l) {
         this.time = t; 
         this.score1 = S1;
         this.score2 = S2;
         this.isEnemyAI = isAI;
-        this.boardSize = b;
+        this.level = l;
 
     }
 
@@ -44,8 +44,8 @@ public class Score implements Serializable {
         return isEnemyAI;
     }
     
-    public int getBoardSize() {
-        return boardSize;
+    public int getLevel() {
+        return level;
     }
     
 }

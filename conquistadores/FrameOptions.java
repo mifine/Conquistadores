@@ -43,10 +43,10 @@ public class FrameOptions extends javax.swing.JFrame {
                 break;
         }
         switch (Game.PLACEMENT) {
-            case "random":
+            case 0:
                 jRadioButtonPlacement1.setSelected(true);
                 break;
-            case "normal":
+            case 1:
                 jRadioButtonPlacement2.setSelected(true);
                 break;
             default:
@@ -343,11 +343,11 @@ public class FrameOptions extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jRadioButtonPlacement1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonPlacement1ActionPerformed
-        Game.PLACEMENT = "random";
+        Game.PLACEMENT = 0;
     }//GEN-LAST:event_jRadioButtonPlacement1ActionPerformed
 
     private void jRadioButtonPlacement2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonPlacement2ActionPerformed
-        Game.PLACEMENT = "normal";
+        Game.PLACEMENT = 1;
     }//GEN-LAST:event_jRadioButtonPlacement2ActionPerformed
 
     private void jRadioButtonBoardSize1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonBoardSize1ActionPerformed
