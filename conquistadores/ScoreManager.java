@@ -10,9 +10,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,39 +20,35 @@ import java.util.Date;
 
 /**
  *
- * Inspired by http://forum.codecall.net/topic/50071-making-a-simple-high-score-system/
+ * Inspired by
+ * http://forum.codecall.net/topic/50071-making-a-simple-high-score-system/
  */
 public class ScoreManager {
 
     private static final String SCORE_FILE = "scores.txt";
 
     public ScoreManager() {
-        
+
     }
 
-    
-    public String getHighscoreString() {
-        String highscoreString = "";
-	// 
-   ArrayList<Score> scores;
+    public String[] getHighscores() {
+        
+        int maxHighScore = 9;
+        ArrayList<Score> scores;
         scores = getScores();
-        int max = scores.size();
-     System.out.println(max);
+        int max = Math.min(maxHighScore, scores.size());
         int i = 0;
-        int x = scores.size();
-        if (x > max) {
-            x = max;
+        String[] highscores = new String[max];
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        
+        while (i < max) {
+            Date date = new Date(scores.get(i).getTime());
+            highscores[i] = (i + 1) + ".    " + dateFormat.format(date) + "   -   Player 1 : " + scores.get(i).getScore1() + "  -   Player 2 ("+ (scores.get(i).getIsAI()==1 ? "AI" : "Human")  +") : " + scores.get(i).getScore2() + "   -   Board Size: " + scores.get(i).getBoardSize() + "\n";
+           i++;
         }
-        while (i < x) {
-          Date date = new Date(scores.get(i).getTime());
-           highscoreString += (i + 1) + ". " + date + " - Player 1: " + scores.get(i).getScore1() + " - Player 2: " + scores.get(i).getScore2() + " - Board Size: " + scores.get(i).getBoardSize() + "\n";
-           //highscoreString += (i + 1) + " - Player 1: " + scores.get(i).getScore1() + " - Player 2: " + scores.get(i).getScore2() + " - Board Size: " + scores.get(i).getBoardSize() + "\n";
-           
-            i++;
-        }
-        return highscoreString;
-}
-    
+        return highscores;
+    }
+
     public ArrayList<Score> getScores() {
         ArrayList<Score> scores = new ArrayList();
         scores = loadScoreFile();
@@ -68,10 +64,10 @@ public class ScoreManager {
         ArrayList scoresString = this.readScore();
         String scoreLine;
         int max = scoresString.size();
-        for(int i = 0; i < max; i++) {
+        for (int i = 0; i < max; i++) {
             scoreLine = scoresString.get(i).toString();
             String[] elts = scoreLine.split(" ");
-          
+
             Score sc = new Score(
                     Long.parseLong(elts[0]),
                     Integer.parseInt(elts[1]),

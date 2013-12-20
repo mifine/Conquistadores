@@ -8,9 +8,10 @@ import static conquistadores.Game.GROUND_TYPE;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.Panel.*;
 import java.awt.event.ActionListener.*;
-import java.util.ArrayList;
 import javax.swing.*;
 
 public class FrameGame extends JFrame {
@@ -376,9 +377,9 @@ public class FrameGame extends JFrame {
     }//GEN-LAST:event_buttonNewGameActionPerformed
 
     private void buttonConsultScoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonConsultScoresActionPerformed
-        String highScores = Game.sm.getHighscoreString();
-        System.out.println(highScores);
-        
+        String[] highScores = Game.sm.getHighscores();
+        this.showHighScores(highScores, 500, 400);
+
     }//GEN-LAST:event_buttonConsultScoresActionPerformed
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
@@ -487,12 +488,6 @@ public class FrameGame extends JFrame {
         frameGame.setSize(700, 500);
         frameGame.setLocationRelativeTo(null);
         frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        frameGame.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                frameGame.dispose();
-//            }
-//        });
 
         boardGamePanel.setPlayerColor(this.playerColor);
 
@@ -520,6 +515,32 @@ public class FrameGame extends JFrame {
             Game.GROUND_COLOR[3] = new Color(161, 218, 28);                              // Swamp : not used yet
             Game.GROUND_COLOR[4] = new Color(161, 218, 28);                              // Desert : not used yet
         }
+    }
+
+    /*
+     * Send a message alert to the player if an action can not be performed due
+     * to a lack of troops, ...
+     */
+    public void showHighScores(String[] highscores, int xsize, int ysize) {
+        JFrame alert = new JFrame();
+        int size = highscores.length;
+
+        alert.setTitle("Conquistadors - High scores");
+        alert.setSize(xsize, ysize);
+
+        JPanel centerP = new JPanel();
+        centerP.setLayout(new GridLayout(size + 2, 1));
+        for (int i = 0; i < size; i++) {
+            centerP.add(new JLabel(highscores[size - i - 1]), JLabel.CENTER);
+        }
+        centerP.add(new JLabel("************************************     High Scores     ************************************"), JLabel.CENTER);
+
+        alert.add(new JLabel("    "), BorderLayout.WEST);
+        alert.add(centerP, BorderLayout.CENTER);
+
+        alert.setLocationRelativeTo(null);
+        alert.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        alert.show();
     }
 
 }

@@ -240,21 +240,17 @@ public class GamePanel extends JPanel {
      * to a lack of troops, ...
      */
     public void sendAlert(String message, int xsize, int ysize) {
-        final Frame alert = new Frame();
+        final JFrame alert = new JFrame();
         JLabel alertLabel = new JLabel(message);
         alert.setTitle("Conquistadors");
         alert.setSize(xsize, ysize);
         alert.add(alertLabel);
         alert.setLocationRelativeTo(null);
-        alert.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                alert.dispose();
-            }
-        });
+        alert.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         alert.show();
     }
+    
     /*
      * Close an action turn
      */
