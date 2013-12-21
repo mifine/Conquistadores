@@ -11,36 +11,31 @@ package conquistadores;
  */
 public class GameMecanics {
 
-    private static String whoPlaysFirst;
+    private static int whoPlaysFirst;
     private static Player player1;
     private static Player player2;
     private Player currentPlayer;
-    private String whoIsPlaying;
+    private int whoIsPlaying;
     private int whoIsPlayingInt;
     private int[] finalScore = new int[3];
     public boolean isEnemyAI;
-    final private int gameLevel;
 
     public int turnNumber = 1;
     public int actionNumber = 1;
 
     public GameMecanics(int level) {
         double rand = Math.random();
-        this.whoPlaysFirst = (rand < 0.5) ? "Player 1" : "Player 2";
+        this.whoPlaysFirst = (rand < 0.5) ? 1 : 2;
         player1 = new PlayerHuman();
-        this.gameLevel = level;
         Game.GM.loadGameParameters();
     }
 
     /*
-     * Once everything is in place, we can start the game.
+     * Once everything is in place, this method will be called from the
+     * GameManager to start the game.
      */
     public void startGame() {
-        if (this.whoPlaysFirst == "Player 1") {
-            this.setCurrentPlayer(1);
-        } else {
-            this.setCurrentPlayer(2);
-        }
+        this.setCurrentPlayer(this.whoPlaysFirst);
         currentPlayer.playTurn();
     }
     /*
@@ -72,7 +67,7 @@ public class GameMecanics {
             }
             attack = true;
         } else {
-            FrameGame.boardGamePanel.sendAlert("You do not have enough troops to send an attack. Please do another action.", 350, 90);
+            FrameGame.boardGamePanel.sendAlert("Vous n'avez pas assez de troupes pour attaquer. Choississez autre chose.", 350, 90);
             attack = false;
         }
         return attack;
@@ -87,20 +82,25 @@ public class GameMecanics {
         boolean sendTroops;
         int destinationTroops = caseDestination.getTroopsNumber();
         int originTroops = caseOrigin.getTroopsNumber();
+
+        // By default, we send all troops but one from the origin case
         int troopsSent = originTroops - 1;
 
-        if (troopsSent > 0 && destinationTroops < (Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2 - 1)) {
-            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2) {
+        // the max number of troops per case increases at each turn, so we recalculate the maxTroops for the turn
+        int maxTroopsAtTurn = Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2;
+
+        if (troopsSent > 0 && destinationTroops < (maxTroopsAtTurn - 1)) {
+            if (troopsSent + destinationTroops <= maxTroopsAtTurn) {
                 caseOrigin.setTroopsNumber(originTroops - troopsSent);
                 caseDestination.setTroopsNumber(destinationTroops + troopsSent);
             } else {
-                caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE - (int) (this.turnNumber - 1) / 2 + 2 + destinationTroops);
-                caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2);
+                caseOrigin.setTroopsNumber(originTroops - maxTroopsAtTurn + destinationTroops);
+                caseDestination.setTroopsNumber(maxTroopsAtTurn);
             }
             sendTroops = true;
         } else {
             if (currentPlayer.whoAmI() == "Human") {
-                FrameGame.boardGamePanel.sendAlert("You can not perform this action. Please do another action.", 400, 90);
+                FrameGame.boardGamePanel.sendAlert("Vous ne pouvez pas faire cette action. Choississez autre chose.", 400, 90);
             }
             sendTroops = false;
         }
@@ -143,7 +143,8 @@ public class GameMecanics {
     }
 
     /*
-     * Close an action turn
+     * Close an action turn Check if the AI can still play (ex: all cases have
+     * only 1 troops) If AI does not have any more troops, then EndGame.
      */
     public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isAI) {
         if (!isAI) {
@@ -152,6 +153,7 @@ public class GameMecanics {
 
         }
         this.actionNumber++;
+
         if (this.actionNumber > Game.MAX_ACTIONS_PER_TURN) {
             this.closeTurn();
         }
@@ -164,7 +166,7 @@ public class GameMecanics {
      * currentPlayer.playTurn(turnNb)
      */
     public void closeTurn() {
-        this.setCurrentPlayer((this.whoIsPlaying == "Player 1") ? 2 : 1);
+        this.setCurrentPlayer((this.whoIsPlaying == 1) ? 2 : 1);
 
         // update the Game panel with the indication of who's turn it is
         if (this.turnNumber < Game.MAX_TURN_NUMBER * 2) {
@@ -187,7 +189,8 @@ public class GameMecanics {
     }
 
     /*
-     * the level is finished, we can close the game Window and save the score
+     * the level is finished, we can close the game Window and update the total
+     * score of the player in the gameManager Then we save the score
      */
     public void endGame() {
         try {
@@ -197,7 +200,9 @@ public class GameMecanics {
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-        Game.SM.writeScore(finalScore[1], finalScore[2], this.isEnemyAI, this.gameLevel);
+        Game.GM.setScoreTotal(Game.GM.getScoreTotal() + finalScore[1]);
+        //  Game.SM.writeScore(finalScore[1], finalScore[2], this.isEnemyAI, this.gameLevel);
+        Game.SM.writeScore();
     }
 
     /*
@@ -221,16 +226,16 @@ public class GameMecanics {
     public void setCurrentPlayer(int player) {
         if (player == 1) {
             this.currentPlayer = player1;
-            this.whoIsPlaying = "Player 1";
+            this.whoIsPlaying = 1;
         } else {
             this.currentPlayer = player2;
-            this.whoIsPlaying = "Player 2";
+            this.whoIsPlaying = 2;
         }
         this.whoIsPlayingInt = player;
     }
 
     public void changePlayer() {
-        this.setCurrentPlayer((this.whoIsPlaying == "Player 1") ? 2 : 1);
+        this.setCurrentPlayer((this.whoIsPlaying == 1) ? 2 : 1);
     }
 
     /*
@@ -260,7 +265,7 @@ public class GameMecanics {
     }
 
     // GET, SET
-    public String getWhoPlaysFirst() {
+    public int getWhoPlaysFirst() {
         return this.whoPlaysFirst;
     }
 

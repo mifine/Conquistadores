@@ -6,8 +6,6 @@ package conquistadores;
  */
 import java.awt.*;
 import java.awt.Color;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
@@ -39,7 +37,7 @@ public class GamePanel extends JPanel {
     public void initGamePanel() {
 
         this.populateCenterPanel();
-        this.populateNorthPanel();
+        this.populateNorthPanel(1, Game.GM.gameMecanics.getWhoPlaysFirst());
         this.populateSouthPanel();
         int middle = (int) Game.BOARD_SIZE / 2;
 
@@ -96,31 +94,29 @@ public class GamePanel extends JPanel {
     /*
      * Populate North JPanel with Turn number - Player or Enemy Turn
      */
-    public void populateNorthPanel() {
-        String whoPlays = Game.GM.gameMecanics.getWhoPlaysFirst();
-        JLabel turnLabel = new JLabel("Turn 1 - " + whoPlays + "'s turn");
+    public void populateNorthPanel(int turnNb, int whoPlays) {
+        JLabel turnLabel = new JLabel("Tour " + turnNb + "/" + Game.MAX_TURN_NUMBER + " - " + (whoPlays == 1 ? Game.GM.getPlayerName() : "Ennemi"));
         turnLabel.setFont(new Font("Verdana", 1, 20));
         this.north.add(turnLabel);
+        
     }
 
     /*
      * Update North JPanel with new Turn number - Player or Enemy Turn
      */
-    public void updateNorthPanel(int turnNb, String whoPlays) {
+    public void updateNorthPanel(int turnNb, int whoPlays) {
         this.north.remove(this.north.getComponent(0));
         this.north.revalidate();
+        populateNorthPanel(turnNb, whoPlays);
         this.north.repaint();
-        JLabel turnLabel = new JLabel("Turn " + turnNb + " - " + whoPlays + "'s turn");
-        turnLabel.setFont(new Font("Verdana", 1, 20));
-        this.north.add(turnLabel);
     }
-
+    
     /*
      * Populate South JPanel with ATTACK and SEND TROOPS buttons
      */
     public void populateSouthPanel() {
-        JButton buttonAttack = new JButton("ATTACK");
-        JButton buttonSend = new JButton("SEND TROOPS");
+        JButton buttonAttack = new JButton("ATTAQUER");
+        JButton buttonSend = new JButton("ENVOYER DES RENFORTS");
 
         buttonAttack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

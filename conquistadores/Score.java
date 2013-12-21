@@ -14,34 +14,27 @@ import java.io.Serializable;
 public class Score implements Serializable {
 
     final private long time;
+    final private String name;
     final private int score1;
-    final private int score2;
-    final private int isEnemyAI;
     final private int level;
 
-    public Score(long t, int S1, int S2, int isAI, int l) {
+    public Score(String n, long t, int S1, int l) {
         this.time = t; 
+        this.name = n;
         this.score1 = S1;
-        this.score2 = S2;
-        this.isEnemyAI = isAI;
         this.level = l;
-
     }
 
     public long getTime() {
         return time;
     }
+    
+    public String getName() {
+        return name;
+    }
 
     public int getScore1() {
         return score1;
-    }
-    
-    public int getScore2() {
-        return score2;
-    }
-    
-    public int getIsAI() {
-        return isEnemyAI;
     }
     
     public int getLevel() {

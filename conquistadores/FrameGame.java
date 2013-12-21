@@ -20,7 +20,7 @@ public class FrameGame extends JFrame {
     public static JFrame frameGame;
     public static GamePanel boardGamePanel;
     //public static GameMecanics gameMecanics;
-    public static EndGameFrame endGameFrame;
+    public static FrameGameEnd endGameFrame;
 
     /**
      * Creates new form NewJFrame
@@ -79,29 +79,29 @@ public class FrameGame extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Welcome to Conquistadores, an epic conquest game. ");
+        jLabel1.setText("Bienvenu dans Conquistadores, un jeu épique !");
         jLabel2.setText("Copyright mifine @2013-2014");
-        jLabel3.setText("The island is already inhabited by some pacifist native people.");
-        jLabel4.setText("You arrive on a new island at the same time as your worst ennemy.");
-        jLabel5.setText("Your goal is to prevent your opponent to expand and conquier more areas.");
-        jLabel6.setText("If you can spare some native people lives, that will be nice as well ");
-        jLabel7.setText("(but you will not gain any bonus for that).");
+        jLabel3.setText("Vous débarquez sur un continent inexploré, déjà habité par des indigènes.");
+        jLabel4.setText("Vous devez conquérir le territoire plus rapidement que votre");
+        jLabel5.setText("ennemi, et gagner le plus de terrain.");
+        jLabel6.setText("Si vous pouvez laisser les indigènes en paix, ce serait un plus ");
+        jLabel7.setText("");
 
-        buttonNewGame.setText("Start new game");
+        buttonNewGame.setText("Commencer une nouvelle partie");
         buttonNewGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonNewGameActionPerformed(evt);
             }
         });
 
-        buttonConsultScores.setText("Consult scores");
+        buttonConsultScores.setText("Consulter les  scores");
         buttonConsultScores.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonConsultScoresActionPerformed(evt);
             }
         });
 
-        buttonExit.setText("EXIT");
+        buttonExit.setText("Quitter le jeu");
         buttonExit.setPreferredSize(new java.awt.Dimension(109, 23));
         buttonExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,8 +128,8 @@ public class FrameGame extends JFrame {
                                                 .addComponent(jLabel7)
                                                 .addComponent(jLabel6)
                                                 .addComponent(jLabel5)
-                                                .addComponent(jLabel3)
-                                                .addComponent(jLabel4))
+                                                .addComponent(jLabel4)
+                                                .addComponent(jLabel3))
                                         .addGap(84, 84, 84))
                                 .addGroup(GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
@@ -143,9 +143,9 @@ public class FrameGame extends JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -163,10 +163,10 @@ public class FrameGame extends JFrame {
                         .addContainerGap())
         );
 
-        jMenuFile.setText("File");
+        jMenuFile.setText("Jeu");
 
         jMenuNewGame.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuNewGame.setText("Start new game");
+        jMenuNewGame.setText("Commencer une nouvelle partie");
         jMenuNewGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuNewGameLevel1ActionPerformed(evt);
@@ -175,16 +175,16 @@ public class FrameGame extends JFrame {
         jMenuFile.add(jMenuNewGame);
 
         jMenuLoadGame.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuLoadGame.setText("Load game");
+        jMenuLoadGame.setText("Charger une partie");
         jMenuLoadGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuLoadGameActionPerformed(evt);
             }
         });
         jMenuFile.add(jMenuLoadGame);
-        
+
         jMenuExit.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuExit.setText("Exit");
+        jMenuExit.setText("Quitter le jeu");
         jMenuExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuExitActionPerformed(evt);
@@ -194,10 +194,10 @@ public class FrameGame extends JFrame {
 
         jMenuBar.add(jMenuFile);
         jMenuOptions.setText("Options");
-        jMenu1.setText("Change player color");
+        jMenu1.setText("Changer la couleur du joueur");
 
         jCheckBoxBlue.setSelected(true);
-        jCheckBoxBlue.setText("Blue");
+        jCheckBoxBlue.setText("Bleu");
         jCheckBoxBlue.setIcon(new ImageIcon(getClass().getResource("/images/blue.jpg"))); // NOI18N
         jCheckBoxBlue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -215,7 +215,7 @@ public class FrameGame extends JFrame {
         });
         jMenu1.add(jCheckBoxOrange);
 
-        jCheckBoxGreen.setText("Green");
+        jCheckBoxGreen.setText("Vert");
         jCheckBoxGreen.setIcon(new ImageIcon(getClass().getResource("/images/green.jpg"))); // NOI18N
         jCheckBoxGreen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -224,7 +224,7 @@ public class FrameGame extends JFrame {
         });
         jMenu1.add(jCheckBoxGreen);
 
-        jCheckBoxPurple.setText("Purple");
+        jCheckBoxPurple.setText("Violet");
         jCheckBoxPurple.setIcon(new ImageIcon(getClass().getResource("/images/purple.jpg"))); // NOI18N
         jCheckBoxPurple.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -233,7 +233,7 @@ public class FrameGame extends JFrame {
         });
         jMenu1.add(jCheckBoxPurple);
 
-        jCheckBoxYellow.setText("Yellow");
+        jCheckBoxYellow.setText("Jaune");
         jCheckBoxYellow.setIcon(new ImageIcon(getClass().getResource("/images/yellow.jpg"))); // NOI18N
         jCheckBoxYellow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,7 +245,7 @@ public class FrameGame extends JFrame {
         jMenuOptions.add(jMenu1);
         jMenuOptions.add(jSeparator1);
 
-        jCheckBoxMenuHuman.setText("Play against Human");
+        jCheckBoxMenuHuman.setText("Jouer contre un Humain");
         jCheckBoxMenuHuman.setToolTipText("");
         jCheckBoxMenuHuman.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -255,7 +255,7 @@ public class FrameGame extends JFrame {
         jMenuOptions.add(jCheckBoxMenuHuman);
 
         jCheckBoxMenuIA.setSelected(true);
-        jCheckBoxMenuIA.setText("Play against IA");
+        jCheckBoxMenuIA.setText("Jouer contre IA");
         jCheckBoxMenuIA.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCheckBoxMenuIAActionPerformed(evt);
@@ -284,7 +284,7 @@ public class FrameGame extends JFrame {
         });
         jMenuInformations.add(jMenuScores);
 
-        jMenuRules.setText("Rules");
+        jMenuRules.setText("Rêgles");
         jMenuRules.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuRulesActionPerformed(evt);
@@ -292,7 +292,7 @@ public class FrameGame extends JFrame {
         });
         jMenuInformations.add(jMenuRules);
 
-        jMenuAbout.setText("About ...");
+        jMenuAbout.setText("Infos ...");
         jMenuAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuAboutActionPerformed(evt);
@@ -353,7 +353,7 @@ public class FrameGame extends JFrame {
 
     private void jMenuRulesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuRulesActionPerformed
         FrameRules frameRules = new FrameRules();
-        frameRules.setTitle("Rules");
+        frameRules.setTitle("Rêgles");
         frameRules.setSize(730, 500);
         frameRules.setLocationRelativeTo(null);
         frameRules.show();
@@ -369,21 +369,25 @@ public class FrameGame extends JFrame {
 
     private void jMenuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAboutActionPerformed
         FrameAbout frameAbout = new FrameAbout();
-        frameAbout.setTitle("About");
+        frameAbout.setTitle("Infos...");
         frameAbout.setSize(310, 280);
         frameAbout.setLocationRelativeTo(null);
         frameAbout.show();
     }//GEN-LAST:event_jMenuAboutActionPerformed
 
     private void buttonNewGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewGameActionPerformed
-        Game.GM.launchLevel(1);
+        FrameGameStart frame = new FrameGameStart();
+        frame.setTitle("Conquistadores - Nouvelle partie");
+        frame.setSize(500, 230);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.show();
     }//GEN-LAST:event_buttonNewGameActionPerformed
 
     private void jMenuLoadGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNewGameActionPerformed
         Game.GM.launchLevel(1);
     }//GEN-LAST:event_buttonNewGameActionPerformed
-    
-    
+
     private void buttonConsultScoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonConsultScoresActionPerformed
         String[] highScores = Game.SM.getHighscores();
         this.showHighScores(highScores, 500, 400);
@@ -490,7 +494,7 @@ public class FrameGame extends JFrame {
 
         frameGame = new JFrame();
       //  gameMecanics = new GameMecanics(level);
-      //  gameMecanics.setIsEnemyAi(this.isEnemyAI);
+        //  gameMecanics.setIsEnemyAi(this.isEnemyAI);
         boardGamePanel = new GamePanel();
 
         frameGame.setTitle("Conquistadors");
@@ -504,21 +508,21 @@ public class FrameGame extends JFrame {
         frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
         frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
 
-      //  gameMecanics.setSecondPlayer(this.isEnemyAI);
+        //  gameMecanics.setSecondPlayer(this.isEnemyAI);
         this.setGroundColors();
 
         boardGamePanel.initGamePanel();
 
         frameGame.show();
-      //  gameMecanics.startGame();
+        //  gameMecanics.startGame();
 
     }
 
-     public void startNewLevel(int level) {
+    public void startNewLevel(int level) {
 
         frameGame = new JFrame();
         boardGamePanel = new GamePanel();
-        
+
         frameGame.setTitle("Conquistadors - niveau " + level);
         frameGame.setSize(700, 500);
         frameGame.setLocationRelativeTo(null);
@@ -530,9 +534,8 @@ public class FrameGame extends JFrame {
         this.setGroundColors();
         boardGamePanel.initGamePanel();
         frameGame.show();
-     }
-     
-     
+    }
+
     private static void setGroundColors() {
         if (Game.GROUND_TYPE == 1) {
             Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.DARK_GRAY;
@@ -555,15 +558,15 @@ public class FrameGame extends JFrame {
         frame.setTitle("Conquistadors - High scores");
         frame.setSize(xsize, ysize);
         centerP.setLayout(new GridLayout(11, 1));
-        
+
         if (highscores != null) {
             int size = highscores.length;
-            
+
             for (int i = 0; i < size; i++) {
                 centerP.add(new JLabel(highscores[size - i - 1]), JLabel.CENTER);
             }
         } else {
-           centerP.add(new JLabel("                                                          Pas encore de scores !"), JLabel.CENTER);
+            centerP.add(new JLabel("                                                          Pas encore de scores !"), JLabel.CENTER);
         }
         centerP.add(new JLabel("************************************     High Scores     ************************************"), JLabel.CENTER);
 
@@ -573,14 +576,14 @@ public class FrameGame extends JFrame {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.show();
     }
-    
+
     /*
      * Show end game frame
      */
     public void showEndGame(int sc1, int sc2) {
-       
-        endGameFrame = new EndGameFrame(sc1, sc2);
-        
+
+        endGameFrame = new FrameGameEnd(sc1, sc2);
+
     }
 
 }

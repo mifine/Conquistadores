@@ -19,12 +19,12 @@ import javax.swing.JPanel;
  *
  * @author mifine
  */
-public class EndGameFrame extends JFrame {
+public class FrameGameEnd extends JFrame {
    
     /*
      * Frame that will display the end level to the player, with scores, and let him choose the next action
      */
-    public EndGameFrame(int score1, int score2) {
+    public FrameGameEnd(int score1, int score2) {
 
         JPanel centerP = new JPanel();
         JPanel southP = new JPanel();
@@ -96,21 +96,22 @@ public class EndGameFrame extends JFrame {
     }
     
     private void buttonNextLevelActionPerformed(java.awt.event.ActionEvent evt) {
-        this.dispose();
+        Game.FG.endGameFrame.dispose();
         Game.FG.frameGame.dispose();
         Game.GM.launchLevel(Game.GM.getCurrentGameLevel() + 1);
         
     }
     
     private void buttonReplayLevelActionPerformed(java.awt.event.ActionEvent evt) {
+        Game.FG.endGameFrame.dispose();
         Game.FG.frameGame.dispose();
         Game.GM.launchLevel(Game.GM.getCurrentGameLevel());
         
     }
     
     private void buttonStopGameActionPerformed(java.awt.event.ActionEvent evt) {
+       Game.FG.endGameFrame.dispose();
        Game.FG.frameGame.dispose();
-        this.dispose();
                 
     }
 }

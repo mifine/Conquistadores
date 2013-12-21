@@ -15,6 +15,8 @@ public class GameManager {
     private boolean isEnemyAI;
     public static GameMecanics gameMecanics;
     private static String[] gameParameters;
+    private static String playerName = "Robert";
+    private static int scoreTotal;
 
     public GameManager() {
 
@@ -24,7 +26,16 @@ public class GameManager {
         boolean bool = false;
         return bool;
     }
+    
+    public void launchNewGame() {
+        this.scoreTotal = 0;
+        this.launchLevel(1);
+    }
 
+    /*
+     * Control all tasks needed to launch a new level.
+     * Initiate gameMecanics & frameGame
+     */
     public void launchLevel(int level) {
         gameMecanics = new GameMecanics(level);
         gameMecanics.setIsEnemyAi(true);
@@ -38,7 +49,23 @@ public class GameManager {
     public int getCurrentGameLevel() {
         return this.currentGameLevel;
     }
+    
+    public void setPlayerName(String name) {
+        this.playerName = name;
+    }
+    
+    public String getPlayerName() {
+        return this.playerName;
+    }
 
+    public void setScoreTotal(int t) {
+        this.scoreTotal = t;
+    }
+    
+    public int getScoreTotal() {
+        return this.scoreTotal;
+    }
+    
     /*
      * Set the game parameters depending on the level
      *

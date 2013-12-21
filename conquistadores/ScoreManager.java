@@ -37,11 +37,14 @@ public class ScoreManager {
         int max = Math.min(maxHighScore, scores.size());
         int i = 0;
         String[] highscores = new String[max];
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
         while (i < max) {
             Date date = new Date(scores.get(i).getTime());
-            highscores[i] = (i + 1) + ".          " + dateFormat.format(date) + "   -   Player 1 : " + scores.get(i).getScore1() + "  -   Player 2 (" + (scores.get(i).getIsAI() == 1 ? "AI" : "Human") + ") : " + scores.get(i).getScore2() + "   -   Level: " + scores.get(i).getLevel() + "\n";
+            highscores[i] = (i + 1) + ".          " + scores.get(i).getScore1() 
+                    + "     -     Niveau atteint :  " + scores.get(i).getLevel() 
+                    + "     -     " + dateFormat.format(date) 
+                    + "     -     " + scores.get(i).getName() +   "\n";
             i++;
         }
         return highscores;}
@@ -73,11 +76,10 @@ public class ScoreManager {
                 String[] elts = scoreLine.split(" ");
 
                 Score sc = new Score(
-                        Long.parseLong(elts[0]),
-                        Integer.parseInt(elts[1]),
+                        elts[0],
+                        Long.parseLong(elts[1]),
                         Integer.parseInt(elts[2]),
-                        Integer.parseInt(elts[3]),
-                        Integer.parseInt(elts[4])
+                        Integer.parseInt(elts[3])
                 );
                 scores.add(sc);
             }
@@ -117,10 +119,13 @@ public class ScoreManager {
     /*
      * Write the new score line to the SCORE_FILE
      */
-    public void writeScore(int player1Score, int player2Score, boolean isEnemyAI, int gameLevel) {
+    //public void writeScore(int player1Score, int player2Score, boolean isEnemyAI, int gameLevel) {
+    public void writeScore() {
         File file = new File(Game.SCORE_FILE);
         Date today = new Date();
-        String score = today.getTime() + " " + player1Score + " " + player2Score + " " + (isEnemyAI ? "1" : "0") + " " + gameLevel;
+     //   String score = today.getTime() + " " + Game.GM.getPlayerName() + " " + player1Score + " " + player2Score + " " + (isEnemyAI ? "1" : "0") + " " + gameLevel;
+       String score = Game.GM.getPlayerName()  + " " +  today.getTime() + " " + Game.GM.getScoreTotal() + " " + Game.GM.getCurrentGameLevel();
+       
         PrintWriter pw = null;
         try {
             FileWriter fw = new FileWriter(file, true);
