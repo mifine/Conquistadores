@@ -538,7 +538,8 @@ public class FrameGame extends JFrame {
 
     private static void setGroundColors() {
         if (Game.GROUND_TYPE == 1) {
-            Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.DARK_GRAY;
+          //  Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.DARK_GRAY;
+              Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.GRAY;
         } else if (GROUND_TYPE == 2) {
             Game.GROUND_COLOR[0] = new Color(154, 205, 50);                              // Forest : +2 DEF
             Game.GROUND_COLOR[1] = new Color(238, 221, 130);                             // Plain : NO BONUS

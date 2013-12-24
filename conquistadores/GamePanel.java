@@ -55,18 +55,21 @@ public class GamePanel extends JPanel {
     }
 
     public void placeGrid(int r, int i, int j, int sep) {
+        Color col = this.playerColor;
         if (r < sep) {
             this.grid[i][j].setClan(1);
-            this.grid[i][j].setClanColor(this.playerColor);
         }
         if (r == sep) {
+            col = new Color(218, 165, 32);
             this.grid[i][j].setClan(0);
-            this.grid[i][j].setClanColor(new Color(218, 165, 32));
         }
         if (r > sep) {
+            col = new Color(255, 102, 102);
             this.grid[i][j].setClan(2);
-            this.grid[i][j].setClanColor(new Color(255, 51, 51));
         }
+        this.grid[i][j].setClanColor(col);
+        this.grid[i][j].setInitialClanColor(col);
+        this.grid[i][j].setInitialBrightClanColor(col.brighter().brighter());
         int ground = this.getRandomNb(3);
         this.grid[i][j].setGround(ground);
         this.grid[i][j].repaint();
@@ -98,7 +101,7 @@ public class GamePanel extends JPanel {
         JLabel turnLabel = new JLabel("Tour " + turnNb + "/" + Game.MAX_TURN_NUMBER + " - " + (whoPlays == 1 ? Game.GM.getPlayerName() : "Ennemi"));
         turnLabel.setFont(new Font("Verdana", 1, 20));
         this.north.add(turnLabel);
-        
+
     }
 
     /*
@@ -110,7 +113,7 @@ public class GamePanel extends JPanel {
         populateNorthPanel(turnNb, whoPlays);
         this.north.repaint();
     }
-    
+
     /*
      * Populate South JPanel with ATTACK and SEND TROOPS buttons
      */
@@ -257,8 +260,6 @@ public class GamePanel extends JPanel {
         destination.repaint();
     }
 
-    
-    
     /*
      * GET, SET
      */

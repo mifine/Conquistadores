@@ -7,8 +7,12 @@ package conquistadores;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.MultipleGradientPaint.CycleMethod;
+import java.awt.RadialGradientPaint;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import javax.swing.*;
 
 public class Case extends JPanel implements MouseListener {
@@ -20,6 +24,7 @@ public class Case extends JPanel implements MouseListener {
     private int ground;
     private boolean isHuman;
     private Color initialColor, clanColor;
+    private Color initialClanColor, initialBrightClanColor;
     private boolean isSelected, canBeSelected;
     public int[][] caseSelected = new int[Game.BOARD_SIZE][Game.BOARD_SIZE];
 
@@ -34,22 +39,52 @@ public class Case extends JPanel implements MouseListener {
     public void paint(Graphics g) {
         super.paint(g);
         int xnb, ynb = 52 * 5 / Game.BOARD_SIZE;
-        int x = 26 * 5 / Game.BOARD_SIZE;
-        int y = 15 * 5 / Game.BOARD_SIZE;
-        int width = 76 * 5 / Game.BOARD_SIZE;
-        int height = 48 * 5 / Game.BOARD_SIZE;
+        int x = 10 * 5 / Game.BOARD_SIZE;
+        int y = 10 * 5 / Game.BOARD_SIZE;
+        int width = 114 * 5 / Game.BOARD_SIZE;
+        int height = 56 * 5 / Game.BOARD_SIZE;
         int arcWidth = 10;
         int arcHeight = 10;
+//        g.setColor(this.clanColor);
+//        g.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+//        g.setColor(this.clanColor.darker().darker());
+//        g.setFont(new Font("Verdana", 1, 40 * 5 / Game.BOARD_SIZE));
+        
+        System.out.println(this.initialClanColor.toString());
+        g.setColor(this.clanColor.darker());
+        g.fillRoundRect (x, y, width, height, arcWidth, arcHeight);
         g.setColor(this.clanColor);
-        g.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
-        g.setColor(this.clanColor.darker().darker());
-        g.setFont(new Font("Verdana", 1, 40 * 5 / Game.BOARD_SIZE));
+        g.fillRoundRect(x+4, y+4, width-8, height-8, arcWidth, arcHeight);
+//      //  g.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+//        g.setColor(this.clanColor.darker().darker());
+//        g.setFont(new Font("Verdana", 1, 20 * 5 / Game.BOARD_SIZE));
+        
+         g.setColor(this.clanColor.darker().darker());
+        g.setFont(new Font("Verdana", 1, 30 * 5 / Game.BOARD_SIZE));
+        
+        for(int i = 0; i < this.troopsNumber; i++)
+        {
+            if(i<6) {
+                g.fillOval(x+i*15+10, y+10, 10, 10);
+            } else
+            if (i>=6 && i<12) {
+                g.fillOval(x+(i-6)*15+10, y+10+15, 10, 10);
+            } else
+            if (i>=12 && i<18)
+                g.fillOval(x+(i-12)*15+10, y+10+30, 10, 10);
+        
+            }
+            
+            
+        
+        g.fillOval(x+10, y+10, 10, 10);
+        
         if (this.troopsNumber < 10) {
             xnb = 51 * 5 / Game.BOARD_SIZE;
         } else {
             xnb = 38 * 5 / Game.BOARD_SIZE;
         }
-        g.drawString(Integer.toString(this.troopsNumber), xnb, ynb);
+    //    g.drawString(Integer.toString(this.troopsNumber), xnb, ynb);
     }
 
     @Override
@@ -88,7 +123,8 @@ public class Case extends JPanel implements MouseListener {
                  * it
                  */ else if (!this.isSelected && this.canBeSelected && this.nbCasesSelected < 2) {
                     this.isSelected = true;
-                    this.setBackground(Color.LIGHT_GRAY);
+//                    this.setBackground(Color.LIGHT_GRAY);
+                      this.clanColor = this.initialBrightClanColor;
                     for (int i = 0; i < Game.BOARD_SIZE; i++) {
                         for (int j = 0; j < Game.BOARD_SIZE; j++) {
                             if (nbCasesSelectedBeforeClick == 0) {
@@ -112,11 +148,13 @@ public class Case extends JPanel implements MouseListener {
         if (this.isHuman) {
             // no case is selected yet : the player can select any of his cases
             if (this.nbCasesSelected == 0 && this.clan == Game.GM.gameMecanics.getWhoIsPlayingInt()) {
-                this.setBackground(Color.LIGHT_GRAY);
+//                this.setBackground(Color.LIGHT_GRAY);
+               this.clanColor = this.initialBrightClanColor;
                 this.canBeSelected = true;
             } // one case is already selected, can be selected only if the neighbour case has been selected
             else if (this.nbCasesSelected == 1 && this.canBeSelected) {
-                this.setBackground(Color.LIGHT_GRAY);
+//                this.setBackground(Color.LIGHT_GRAY);
+                this.clanColor = this.initialBrightClanColor;
                 if (!this.isSelected) {
                     boolean neighbour = false;
                     for (int i = 0; i < Game.BOARD_SIZE; i++) {
@@ -127,7 +165,8 @@ public class Case extends JPanel implements MouseListener {
                         }
                     }
                     if (neighbour) {
-                        this.setBackground(Color.LIGHT_GRAY);
+//                        this.setBackground(Color.LIGHT_GRAY);
+                        this.clanColor = this.initialBrightClanColor;
                         this.canBeSelected = true;
                     } else {
                         this.canBeSelected = false;
@@ -135,22 +174,24 @@ public class Case extends JPanel implements MouseListener {
                 }
             }
         }
+        this.repaint();
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         if (this.isHuman) {
             if (!this.isSelected && this.nbCasesSelected != 2) {
+                this.clanColor = this.initialClanColor;
                 this.setBackground(this.initialColor);
             }
             if (this.nbCasesSelected == 1) {
                 //       this.canBeSelected = false;
             }
         }
+        this.repaint();
     }
 
     public boolean isNeighbour(int i, int j) {
-        boolean result = false;
         int x = this.posx;
         int y = this.posy;
         if ((i == (x - 1) && j == y) || (i == (x + 1) && j == y) || (i == x && j == (y - 1)) || (i == x && j == (y + 1))) {
@@ -177,6 +218,23 @@ public class Case extends JPanel implements MouseListener {
     public void setClanColor(Color colorId) {
         this.clanColor = colorId;
     }
+    
+    public void setInitialClanColor(Color colorId) {
+        this.initialClanColor = colorId;
+    }
+    
+    public Color getInitialClanColor() {
+        return this.initialClanColor;
+    }
+    
+    public void setInitialBrightClanColor(Color colorId) {
+        this.initialBrightClanColor = colorId;
+    }
+    
+    public Color getInitialBrightClanColor() {
+        return this.initialBrightClanColor;
+    }
+    
 
     public Color getClanColor() {
         return this.clanColor;
@@ -230,12 +288,14 @@ public class Case extends JPanel implements MouseListener {
     public void setGround(int gd) {
         this.ground = gd;
         this.initialColor = Game.GROUND_COLOR[gd];
+      //  this.initialClanColor = 
         this.setBackground(this.initialColor);
     }
 
     public int getGround() {
         return this.ground;
     }
+    
 
     // END GET - SET
 
@@ -247,6 +307,7 @@ public class Case extends JPanel implements MouseListener {
         this.canBeSelected = true;
         this.nbCasesSelected = 0;
         this.setBackground(this.initialColor);
+        this.clanColor = this.initialClanColor;
         for (int i = 0; i < Game.BOARD_SIZE; i++) {
             for (int j = 0; j < Game.BOARD_SIZE; j++) {
                 this.caseSelected[i][j] = 0;
@@ -259,7 +320,9 @@ public class Case extends JPanel implements MouseListener {
      */
     public void updateBackgroundDisplay() {
         try {
-            this.setBackground(Color.LIGHT_GRAY);
+//            this.setBackground(Color.LIGHT_GRAY);
+            this.clanColor = this.initialBrightClanColor;
+            this.repaint();
             Thread.sleep(500);
             // Thread.sleep(10);
         } catch (InterruptedException ex) {
@@ -267,5 +330,6 @@ public class Case extends JPanel implements MouseListener {
         }
         this.repaint();
     }
-
+    
+   
 }

@@ -56,7 +56,9 @@ public class GameMecanics {
             if (diff > 0) {
                 caseOrigin.setTroopsNumber(1);
                 caseDestination.setClan(caseOrigin.getClan());
-                caseDestination.setClanColor(caseOrigin.getClanColor());
+                caseDestination.setClanColor(caseOrigin.getInitialClanColor());
+                caseDestination.setInitialClanColor(caseOrigin.getInitialClanColor());
+                caseDestination.setInitialBrightClanColor(caseOrigin.getClanColor());
                 caseDestination.setTroopsNumber(diff);
             } else if (diff == 0) {
                 caseOrigin.setTroopsNumber(1);
