@@ -5,7 +5,7 @@ package conquistadores;
  * @author mifine
  */
 public class PlayerHuman extends Player {
-
+    
     @Override
     public void playTurn() {
         System.out.println("Human Plays");
@@ -16,5 +16,5 @@ public class PlayerHuman extends Player {
     public String whoAmI() {
         return "Human";
     }
-
+    
 }

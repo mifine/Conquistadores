@@ -26,6 +26,8 @@ public class Case extends JPanel implements MouseListener {
     private Color initialColor, clanColor;
     private Color initialClanColor, initialBrightClanColor;
     private boolean isSelected, canBeSelected;
+    private boolean displayAttack;
+    private int attack = 0;
     public int[][] caseSelected = new int[Game.BOARD_SIZE][Game.BOARD_SIZE];
 
     public Case(int x, int y) {
@@ -36,55 +38,89 @@ public class Case extends JPanel implements MouseListener {
         addMouseListener(this);
     }
 
+    @Override
     public void paint(Graphics g) {
+        double coeff = 1;
+
+        int x = 10;
+        int y = 10;
+        int width = 114;
+        int height = 56;
+//         int x = 2;
+//        int y = 2;
+//        int width = 130;
+//        int height = 72;
+        int arc = 10;
+        int xOval = 0, yOval = 0;
+        int xMiddle = 10 - 2 + (114 - 8) / 2;
+        int yMiddle = 10 + 21;
+        int sizePion = 10;
+
+//        if (Game.BOARD_SIZE == 7 || Game.BOARD_SIZE == 11) {
+//            x = 10 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//            y = 10 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//            width = 114 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//            height = 56 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//            sizePion = sizePion * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//        }
+
         super.paint(g);
-        int xnb, ynb = 52 * 5 / Game.BOARD_SIZE;
-        int x = 10 * 5 / Game.BOARD_SIZE;
-        int y = 10 * 5 / Game.BOARD_SIZE;
-        int width = 114 * 5 / Game.BOARD_SIZE;
-        int height = 56 * 5 / Game.BOARD_SIZE;
-        int arcWidth = 10;
-        int arcHeight = 10;
-//        g.setColor(this.clanColor);
-//        g.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
-//        g.setColor(this.clanColor.darker().darker());
-//        g.setFont(new Font("Verdana", 1, 40 * 5 / Game.BOARD_SIZE));
-        
-        System.out.println(this.initialClanColor.toString());
-        g.setColor(this.clanColor.darker());
-        g.fillRoundRect (x, y, width, height, arcWidth, arcHeight);
+        g.setColor(this.clanColor.darker().darker());
+        g.fillRoundRect(x, y, width, height, arc, arc);
         g.setColor(this.clanColor);
-        g.fillRoundRect(x+4, y+4, width-8, height-8, arcWidth, arcHeight);
-//      //  g.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
-//        g.setColor(this.clanColor.darker().darker());
-//        g.setFont(new Font("Verdana", 1, 20 * 5 / Game.BOARD_SIZE));
-        
-         g.setColor(this.clanColor.darker().darker());
-        g.setFont(new Font("Verdana", 1, 30 * 5 / Game.BOARD_SIZE));
-        
-        for(int i = 0; i < this.troopsNumber; i++)
-        {
-            if(i<6) {
-                g.fillOval(x+i*15+10, y+10, 10, 10);
-            } else
-            if (i>=6 && i<12) {
-                g.fillOval(x+(i-6)*15+10, y+10+15, 10, 10);
-            } else
-            if (i>=12 && i<18)
-                g.fillOval(x+(i-12)*15+10, y+10+30, 10, 10);
-        
+        g.fillRoundRect((int) (x + 4 * coeff), (int) (y + 4 * coeff), (int) (width - 8 * coeff), (int) (height - 8 * coeff), arc, arc);
+        g.setColor(this.clanColor.darker().darker());
+
+        if (!this.displayAttack) {
+            for (int i = 0;
+                    i < this.troopsNumber; i++) {
+                if (i < 7) {
+                    xOval = xMiddle + (i % 2 == 1 ? (14 * (i + 1) / 2) : (-14 * i / 2));
+                    yOval = yMiddle;
+                } else if (i < 13) {
+                    xOval = xMiddle - 7 + (i % 2 == 1 ? (14 * (i + 1 - 7 + 1) / 2) : (-14 * (i - 7) / 2) + 7);
+                    yOval = yMiddle - 14;
+                } else if (i < 19) {
+                    xOval = xMiddle - 7 + (i % 2 == 1 ? (14 * (i + 1 - 13 + 1) / 2) : (-14 * (i - 13) / 2) + 7);
+                    yOval = yMiddle + 14;
+                }
+
+//                if (Game.BOARD_SIZE == 7 || Game.BOARD_SIZE == 11) {
+//                    xOval = xOval * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                    yOval = yOval * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                }
+                g.fillOval(xOval, yOval, sizePion, sizePion);
             }
-            
-            
-        
-        g.fillOval(x+10, y+10, 10, 10);
-        
-        if (this.troopsNumber < 10) {
-            xnb = 51 * 5 / Game.BOARD_SIZE;
-        } else {
-            xnb = 38 * 5 / Game.BOARD_SIZE;
         }
-    //    g.drawString(Integer.toString(this.troopsNumber), xnb, ynb);
+
+        //to display the attack total score
+        if (this.displayAttack) {
+            xOval = xMiddle - 21;
+            yOval = yMiddle - 8;
+            int xWidth = 4 * 14;
+            int yHeight = 2 * 14;
+            g.setFont(new Font("Verdana", 1, 15));
+//            if (Game.BOARD_SIZE == 7 || Game.BOARD_SIZE == 11) {
+//                xOval = xOval * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                yOval = yOval * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                xWidth = xWidth * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                yHeight = yHeight * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                xMiddle = xMiddle * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                yMiddle = yMiddle * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE;
+//                g.setFont(new Font("Verdana", 1, 15 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE));
+//            }
+            g.setColor(Color.LIGHT_GRAY);
+            g.fillRoundRect(xOval, yOval, xWidth, yHeight, arc, arc);
+            g.setColor(this.clanColor.darker().darker());
+            g.fillRoundRect(xOval + 2, yOval + 2, xWidth - 4, yHeight - 4, arc, arc);
+            g.setColor(this.clanColor);
+            if (this.attack < 10) {
+                g.drawString(Integer.toString(this.attack), xMiddle + 3 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE, yMiddle + 17 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE);
+            } else {
+                g.drawString(Integer.toString(this.attack), xMiddle - 7 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE, yMiddle + 17 * (Game.BOARD_SIZE - 2) / Game.BOARD_SIZE);
+            }
+
+        }
     }
 
     @Override
@@ -124,7 +160,7 @@ public class Case extends JPanel implements MouseListener {
                  */ else if (!this.isSelected && this.canBeSelected && this.nbCasesSelected < 2) {
                     this.isSelected = true;
 //                    this.setBackground(Color.LIGHT_GRAY);
-                      this.clanColor = this.initialBrightClanColor;
+                    this.clanColor = this.initialBrightClanColor;
                     for (int i = 0; i < Game.BOARD_SIZE; i++) {
                         for (int j = 0; j < Game.BOARD_SIZE; j++) {
                             if (nbCasesSelectedBeforeClick == 0) {
@@ -149,7 +185,7 @@ public class Case extends JPanel implements MouseListener {
             // no case is selected yet : the player can select any of his cases
             if (this.nbCasesSelected == 0 && this.clan == Game.GM.gameMecanics.getWhoIsPlayingInt()) {
 //                this.setBackground(Color.LIGHT_GRAY);
-               this.clanColor = this.initialBrightClanColor;
+                this.clanColor = this.initialBrightClanColor;
                 this.canBeSelected = true;
             } // one case is already selected, can be selected only if the neighbour case has been selected
             else if (this.nbCasesSelected == 1 && this.canBeSelected) {
@@ -218,23 +254,22 @@ public class Case extends JPanel implements MouseListener {
     public void setClanColor(Color colorId) {
         this.clanColor = colorId;
     }
-    
+
     public void setInitialClanColor(Color colorId) {
         this.initialClanColor = colorId;
     }
-    
+
     public Color getInitialClanColor() {
         return this.initialClanColor;
     }
-    
+
     public void setInitialBrightClanColor(Color colorId) {
         this.initialBrightClanColor = colorId;
     }
-    
+
     public Color getInitialBrightClanColor() {
         return this.initialBrightClanColor;
     }
-    
 
     public Color getClanColor() {
         return this.clanColor;
@@ -288,14 +323,21 @@ public class Case extends JPanel implements MouseListener {
     public void setGround(int gd) {
         this.ground = gd;
         this.initialColor = Game.GROUND_COLOR[gd];
-      //  this.initialClanColor = 
+        //  this.initialClanColor = 
         this.setBackground(this.initialColor);
     }
 
     public int getGround() {
         return this.ground;
     }
-    
+
+    public void setDisplayAttack(boolean bool) {
+        this.displayAttack = bool;
+    }
+
+    public boolean getDisplayAttack() {
+        return this.displayAttack;
+    }
 
     // END GET - SET
 
@@ -330,6 +372,21 @@ public class Case extends JPanel implements MouseListener {
         }
         this.repaint();
     }
-    
-   
+
+    /*
+     * Display the attack score if bool = true, remove if bool = false
+     */
+    public void displayAttack(boolean bool, int att) {
+        this.displayAttack = bool;
+        this.attack = att;
+        this.repaint();
+        if (bool) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
+
 }

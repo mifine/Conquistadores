@@ -25,8 +25,8 @@ public class GamePanel extends JPanel {
 
     public GamePanel() {
         GridLayout g1 = new GridLayout(Game.BOARD_SIZE, Game.BOARD_SIZE);
-        g1.setHgap(1);
-        g1.setVgap(1);
+//        g1.setHgap(1);
+//        g1.setVgap(1);
         this.board.setLayout(g1);
     }
 
@@ -56,20 +56,24 @@ public class GamePanel extends JPanel {
 
     public void placeGrid(int r, int i, int j, int sep) {
         Color col = this.playerColor;
+        // Player
         if (r < sep) {
             this.grid[i][j].setClan(1);
         }
+        // Natives
         if (r == sep) {
-            col = new Color(218, 165, 32);
+            col = new Color(153, 76, 0);
             this.grid[i][j].setClan(0);
         }
+        // Enemy
         if (r > sep) {
-            col = new Color(255, 102, 102);
+            col = new Color(153, 0, 0);
             this.grid[i][j].setClan(2);
         }
+        this.grid[i][j].setDisplayAttack(false);
         this.grid[i][j].setClanColor(col);
         this.grid[i][j].setInitialClanColor(col);
-        this.grid[i][j].setInitialBrightClanColor(col.brighter().brighter());
+        this.grid[i][j].setInitialBrightClanColor(col.brighter().brighter().brighter());
         int ground = this.getRandomNb(3);
         this.grid[i][j].setGround(ground);
         this.grid[i][j].repaint();
@@ -78,8 +82,8 @@ public class GamePanel extends JPanel {
     /*
      * Set Player Color @param Color colorToSet
      */
-    public void setPlayerColor(Color colorToSet) {
-        this.playerColor = colorToSet;
+    public void setPlayerColor(Color col) {
+        this.playerColor = col;
     }
 
     /*
@@ -142,11 +146,16 @@ public class GamePanel extends JPanel {
      */
     private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {
         if (this.canBeActioned(0)) {
-            if (Game.GM.gameMecanics.resolveAttack(this.caseOrigin, this.caseDestination)) {
-                Game.GM.gameMecanics.closeActionTurn(this.caseOrigin, this.caseDestination, false);
-            }
-        }
+            Thread t = new Thread() {
+                public void run() {
+                    if (Game.GM.gameMecanics.resolveAttack(caseOrigin, caseDestination)) {
+                        Game.GM.gameMecanics.closeActionTurn(caseOrigin, caseDestination, false);
+                    }
+                }
+            };
+            t.start();
 
+        }
     }
 
     /*

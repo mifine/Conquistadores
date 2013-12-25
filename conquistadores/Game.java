@@ -21,7 +21,7 @@ public class Game {
     //declare game constants 
     static int MAX_TURN_NUMBER = 1;
     static int MAX_ACTIONS_PER_TURN = 3;
-    static int MAX_TROOPS_PER_CASE = 17;
+    static int MAX_TROOPS_PER_CASE = 18;
     static int ADD_TROOPS_PER_TURN = 1;
     static int BOARD_SIZE = 7;
     static int INITIAL_TROOPS_NATIVE = 7;

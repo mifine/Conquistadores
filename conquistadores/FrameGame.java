@@ -19,14 +19,14 @@ public class FrameGame extends JFrame {
     private boolean isEnemyAI;
     public static JFrame frameGame;
     public static GamePanel boardGamePanel;
-    //public static GameMecanics gameMecanics;
     public static FrameGameEnd endGameFrame;
 
     /**
      * Creates new form NewJFrame
      */
     public FrameGame() {
-        this.playerColor = new Color(102, 102, 255);                            // This is the default color: blue
+        //this.playerColor = new Color(102, 102, 255);                            // This is the default color: blue
+        this.playerColor = new Color(0, 153, 0);
         this.isEnemyAI = true;                                                  // By default, play against IA
 
         /*
@@ -34,7 +34,6 @@ public class FrameGame extends JFrame {
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-
                 initComponents();
             }
         });
@@ -471,52 +470,54 @@ public class FrameGame extends JFrame {
         }
         switch (color) {
             case "blue":
-                this.playerColor = new Color(102, 102, 255);
+                this.playerColor = new Color(0, 76, 153);
                 break;
             case "orange":
-                this.playerColor = new Color(255, 153, 102);
+                this.playerColor = new Color(153, 76, 0);
                 break;
             case "yellow":
-                this.playerColor = new Color(255, 255, 102);
+                this.playerColor = new Color(153, 153, 0);
                 break;
             case "purple":
-                this.playerColor = new Color(255, 102, 255);
+                this.playerColor = new Color(153, 0, 153);
                 break;
             case "green":
-                this.playerColor = new Color(102, 255, 102);
+                this.playerColor = new Color(0, 153, 0);
                 break;
             default:
         }
 
     }
 
-    private void launchNewGame(int level) {
-
-        frameGame = new JFrame();
-      //  gameMecanics = new GameMecanics(level);
-        //  gameMecanics.setIsEnemyAi(this.isEnemyAI);
-        boardGamePanel = new GamePanel();
-
-        frameGame.setTitle("Conquistadors");
-        frameGame.setSize(700, 500);
-        frameGame.setLocationRelativeTo(null);
-        frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        boardGamePanel.setPlayerColor(this.playerColor);
-
-        frameGame.add(boardGamePanel.board, BorderLayout.CENTER);
-        frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
-        frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
-
-        //  gameMecanics.setSecondPlayer(this.isEnemyAI);
-        this.setGroundColors();
-
-        boardGamePanel.initGamePanel();
-
-        frameGame.show();
-        //  gameMecanics.startGame();
-
-    }
+//    private void launchNewGame(int level) {
+//
+//        frameGame = new JFrame();
+//        //  gameMecanics = new GameMecanics(level);
+//        //  gameMecanics.setIsEnemyAi(this.isEnemyAI);
+//        boardGamePanel = new GamePanel();
+//
+//        frameGame.setTitle("Conquistadors");
+//        int xSize = 700 * Game.BOARD_SIZE / 5;
+//        int ySize = 500 * Game.BOARD_SIZE / 5;
+//        frameGame.setSize(xSize, ySize);
+//        frameGame.setLocationRelativeTo(null);
+//        frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//
+//        boardGamePanel.setPlayerColor(this.playerColor);
+//
+//        frameGame.add(boardGamePanel.board, BorderLayout.CENTER);
+//        frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
+//        frameGame.add(boardGamePanel.north, BorderLayout.NORTH);
+//
+//        //  gameMecanics.setSecondPlayer(this.isEnemyAI);
+//        this.setGroundColors();
+//
+//        boardGamePanel.initGamePanel();
+//
+//        frameGame.show();
+//        //  gameMecanics.startGame();
+//
+//    }
 
     public void startNewLevel(int level) {
 
@@ -524,7 +525,17 @@ public class FrameGame extends JFrame {
         boardGamePanel = new GamePanel();
 
         frameGame.setTitle("Conquistadors - niveau " + level);
-        frameGame.setSize(700, 500);
+        int xSize = 700;
+        int ySize = 500;
+//        if (Game.BOARD_SIZE == 9 || Game.BOARD_SIZE == 11) {
+//            xSize = 700 * 9 / 5;
+//            ySize = 500 * 9 / 5;
+//        }
+        xSize = 700 * Game.BOARD_SIZE / 5;
+        ySize = 500 * Game.BOARD_SIZE / 5;
+            
+
+        frameGame.setSize(xSize, ySize);
         frameGame.setLocationRelativeTo(null);
         frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         boardGamePanel.setPlayerColor(this.playerColor);
@@ -538,8 +549,8 @@ public class FrameGame extends JFrame {
 
     private static void setGroundColors() {
         if (Game.GROUND_TYPE == 1) {
-          //  Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.DARK_GRAY;
-              Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.GRAY;
+            //  Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.DARK_GRAY;
+            Game.GROUND_COLOR[0] = Game.GROUND_COLOR[1] = Game.GROUND_COLOR[2] = Color.GRAY;
         } else if (GROUND_TYPE == 2) {
             Game.GROUND_COLOR[0] = new Color(154, 205, 50);                              // Forest : +2 DEF
             Game.GROUND_COLOR[1] = new Color(238, 221, 130);                             // Plain : NO BONUS

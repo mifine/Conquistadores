@@ -53,6 +53,8 @@ public class GameMecanics {
             int attackLvl = attackTroops + this.alea() + this.bonus("attack", caseOrigin.getGround());
             int defendLvl = defendTroops + this.alea() + this.bonus("defense", caseDestination.getGround());
             int diff = attackLvl - defendLvl;
+            caseOrigin.displayAttack(true, attackLvl);
+            caseDestination.displayAttack(true, defendLvl);
             if (diff > 0) {
                 caseOrigin.setTroopsNumber(1);
                 caseDestination.setClan(caseOrigin.getClan());
@@ -89,15 +91,15 @@ public class GameMecanics {
         int troopsSent = originTroops - 1;
 
         // the max number of troops per case increases at each turn, so we recalculate the maxTroops for the turn
-        int maxTroopsAtTurn = Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2;
-
-        if (troopsSent > 0 && destinationTroops < (maxTroopsAtTurn - 1)) {
-            if (troopsSent + destinationTroops <= maxTroopsAtTurn) {
+        //    int maxTroopsAtTurn = Game.MAX_TROOPS_PER_CASE + (int) (this.turnNumber - 1) / 2;
+        // int maxTroopsAtTurn = Game.MAX_TROOPS_PER_CASE;
+        if (troopsSent > 0 && destinationTroops < (Game.MAX_TROOPS_PER_CASE - 1)) {
+            if (troopsSent + destinationTroops <= Game.MAX_TROOPS_PER_CASE) {
                 caseOrigin.setTroopsNumber(originTroops - troopsSent);
                 caseDestination.setTroopsNumber(destinationTroops + troopsSent);
             } else {
-                caseOrigin.setTroopsNumber(originTroops - maxTroopsAtTurn + destinationTroops);
-                caseDestination.setTroopsNumber(maxTroopsAtTurn);
+                caseOrigin.setTroopsNumber(originTroops - Game.MAX_TROOPS_PER_CASE + destinationTroops);
+                caseDestination.setTroopsNumber(Game.MAX_TROOPS_PER_CASE);
             }
             sendTroops = true;
         } else {
@@ -151,14 +153,14 @@ public class GameMecanics {
     public void closeActionTurn(Case caseOrigin, Case caseDestination, boolean isAI) {
         if (!isAI) {
             FrameGame.boardGamePanel.closeActionTurn(caseOrigin, caseDestination);
-        } else {
-
         }
         this.actionNumber++;
 
         if (this.actionNumber > Game.MAX_ACTIONS_PER_TURN) {
             this.closeTurn();
         }
+        caseOrigin.displayAttack(false, 0);
+        caseDestination.displayAttack(false, 0);
     }
 
     /*
