@@ -42,9 +42,9 @@ public class ScoreManager {
         while (i < max) {
             Date date = new Date(scores.get(i).getTime());
             highscores[i] = (i + 1) + ".          " + scores.get(i).getScore1() 
-                    + "     -     Niveau atteint :  " + scores.get(i).getLevel() 
-                    + "     -     " + dateFormat.format(date) 
-                    + "     -     " + scores.get(i).getName() +   "\n";
+                    + "   -   Niveau :  " + scores.get(i).getLevel() 
+                    + "   -   " + dateFormat.format(date) 
+                    + "   -   " + scores.get(i).getName() +   "\n";
             i++;
         }
         return highscores;}

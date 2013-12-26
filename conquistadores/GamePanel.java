@@ -102,7 +102,8 @@ public class GamePanel extends JPanel {
      * Populate North JPanel with Turn number - Player or Enemy Turn
      */
     public void populateNorthPanel(int turnNb, int whoPlays) {
-        JLabel turnLabel = new JLabel("Tour " + turnNb + "/" + Game.MAX_TURN_NUMBER + " - " + (whoPlays == 1 ? Game.GM.getPlayerName() : "Ennemi"));
+        JLabel turnLabel = new JLabel((whoPlays == 1 ? Game.GM.getPlayerName() : "Ennemi")  + "  -  Tour " + turnNb + "/" + Game.MAX_TURN_NUMBER  
+        + (whoPlays == 1 ? "  -  Coup " + Game.GM.gameMecanics.getActionNumber() + "/" + Game.MAX_ACTIONS_PER_TURN : ""));
         turnLabel.setFont(new Font("Verdana", 1, 20));
         this.north.add(turnLabel);
 

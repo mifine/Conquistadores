@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Panel.*;
 import java.awt.event.ActionListener.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 public class FrameGame extends JFrame {
@@ -518,26 +520,31 @@ public class FrameGame extends JFrame {
 //        //  gameMecanics.startGame();
 //
 //    }
-
     public void startNewLevel(int level) {
 
         frameGame = new JFrame();
         boardGamePanel = new GamePanel();
 
         frameGame.setTitle("Conquistadors - niveau " + level);
-        int xSize = 700;
-        int ySize = 500;
-//        if (Game.BOARD_SIZE == 9 || Game.BOARD_SIZE == 11) {
-//            xSize = 700 * 9 / 5;
-//            ySize = 500 * 9 / 5;
-//        }
-        xSize = 700 * Game.BOARD_SIZE / 5;
-        ySize = 500 * Game.BOARD_SIZE / 5;
-            
+        int xSize = 700 * Game.BOARD_SIZE / 5;
+        int ySize = 500 * Game.BOARD_SIZE / 5;
 
         frameGame.setSize(xSize, ySize);
         frameGame.setLocationRelativeTo(null);
-        frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameGame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frameGame.dispose();
+                // if the play closes the main windows : we write the score to the file (total score up to the last level, and 
+                // indicate the best won level : current lvl-1. We check if this is not the first.
+                int lvl = Game.GM.getCurrentGameLevel() - 1;
+                if (lvl > 0) {
+                    Game.GM.setCurrentGameLevel(lvl);
+                    Game.SM.writeScore();
+                }
+            }
+        });
+        // frameGame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         boardGamePanel.setPlayerColor(this.playerColor);
         frameGame.add(boardGamePanel.board, BorderLayout.CENTER);
         frameGame.add(boardGamePanel.south, BorderLayout.SOUTH);
@@ -590,12 +597,11 @@ public class FrameGame extends JFrame {
     }
 
     /*
-     * Show end game frame
+     * Show end level frame
      */
-    public void showEndGame(int sc1, int sc2) {
-
+    public void showEndLevel(int sc1, int sc2) {
+        Game.GM.disableAllCases(true);
         endGameFrame = new FrameGameEnd(sc1, sc2);
-
     }
 
 }

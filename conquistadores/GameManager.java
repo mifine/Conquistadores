@@ -15,18 +15,24 @@ public class GameManager {
     private boolean isEnemyAI;
     public static GameMecanics gameMecanics;
     private static String[] gameParameters;
-    private static String playerName = "Robert";
+    private static String playerName = "VotreNom";
     private static int scoreTotal;
 
     public GameManager() {
-
     }
 
+    /*
+     * not yet implemented. Will be used to check of the next level exists or if it is the end of the game.
+     */
     public boolean checkIfLevelExists(int level) {
         boolean bool = false;
         return bool;
     }
     
+    /*
+     * Launch a new game, starting at level 1, reseting the total score. 
+     * Game againt the computer
+     */
     public void launchNewGame() {
         this.scoreTotal = 0;
         this.launchLevel(1);
@@ -40,30 +46,22 @@ public class GameManager {
         gameMecanics = new GameMecanics(level);
         gameMecanics.setIsEnemyAi(true);
         gameMecanics.setSecondPlayer(true);
-        gameMecanics.setGameParameters(gameParameters[level]);
+        gameMecanics.setGameParameters(gameParameters[level-1]);
         this.currentGameLevel = level;
         Game.FG.startNewLevel(level);
         gameMecanics.startGame();
     }
 
-    public int getCurrentGameLevel() {
-        return this.currentGameLevel;
-    }
-    
-    public void setPlayerName(String name) {
-        this.playerName = name;
-    }
-    
-    public String getPlayerName() {
-        return this.playerName;
-    }
-
-    public void setScoreTotal(int t) {
-        this.scoreTotal = t;
-    }
-    
-    public int getScoreTotal() {
-        return this.scoreTotal;
+    /*
+     * method called to disable all cases when displaying the score (impossible to click)
+     */
+    public void disableAllCases(boolean bool){
+        for (int i = 0; i < Game.BOARD_SIZE; i++) {
+            for (int j = 0; j < Game.BOARD_SIZE; j++) {
+                FrameGame.boardGamePanel.grid[i][j].setCanBeSelected(!bool);
+                FrameGame.boardGamePanel.grid[i][j].setNbCasesSelected(2);
+            }
+        }
     }
     
     /*
@@ -117,5 +115,32 @@ public class GameManager {
         }
         
     }
+    
+     // GET, SET
+    public int getCurrentGameLevel() {
+        return this.currentGameLevel;
+    }
+    
+    public void setCurrentGameLevel(int lvl){
+        this.currentGameLevel = lvl;
+    }
+    
+    public void setPlayerName(String name) {
+        this.playerName = name;
+    }
+    
+    public String getPlayerName() {
+        return this.playerName;
+    }
+
+    public void setScoreTotal(int t) {
+        this.scoreTotal = t;
+    }
+    
+    public int getScoreTotal() {
+        return this.scoreTotal;
+    }
+    
+    // END GET, SET
 
 }

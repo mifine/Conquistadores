@@ -19,11 +19,11 @@ public class Game {
     final static GameManager GM = new GameManager();
 
     //declare game constants 
+    static int BOARD_SIZE = 7;
     static int MAX_TURN_NUMBER = 1;
     static int MAX_ACTIONS_PER_TURN = 3;
     static int MAX_TROOPS_PER_CASE = 18;
     static int ADD_TROOPS_PER_TURN = 1;
-    static int BOARD_SIZE = 7;
     static int INITIAL_TROOPS_NATIVE = 7;
     static int INITIAL_TROOPS_PLAYER = 11;
     static int AI_LEVEL = 0;
@@ -40,7 +40,7 @@ public class Game {
          */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 FG.setTitle("Conquistadors");
                 FG.setSize(600, 400);
                 FG.setLocationRelativeTo(null);
@@ -48,7 +48,7 @@ public class Game {
                 FG.setLayout(new BorderLayout());
                 FG.setResizable(false);
                 FG.show();
-                 
+
             }
         });
     }

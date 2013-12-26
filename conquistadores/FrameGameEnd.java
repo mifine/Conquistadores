@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package conquistadores;
 
 import java.awt.BorderLayout;
@@ -20,9 +19,14 @@ import javax.swing.JPanel;
  * @author mifine
  */
 public class FrameGameEnd extends JFrame {
-   
+
+    private boolean writeScore;
+    
     /*
-     * Frame that will display the end level to the player, with scores, and let him choose the next action
+     * Frame that will display the end level to the player, with scores, and let
+     * him choose the next action
+     * The score is recorded if we stop the game, or close the window AND we have 
+     * won the level.
      */
     public FrameGameEnd(int score1, int score2) {
 
@@ -39,7 +43,8 @@ public class FrameGameEnd extends JFrame {
         if (score1 >= score2) {
             message1 = new JLabel("BRAVO ! Vous avez gagné et terminé ce niveau !");
             message2 = new JLabel("Voulez vous continuer et passer au niveau suivant ?");
-            button1 = new JButton("Continuer au niveau " + (int)(Game.GM.getCurrentGameLevel() + 1));
+            button1 = new JButton("Continuer au niveau " + (int) (Game.GM.getCurrentGameLevel() + 1));
+            this.writeScore = true;
             button1.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     buttonNextLevelActionPerformed(evt);
@@ -49,6 +54,7 @@ public class FrameGameEnd extends JFrame {
             message1 = new JLabel("Vous avez perdu !");
             message2 = new JLabel("Voulez vous rejouer ?");
             button1 = new JButton("Rejouer");
+            this.writeScore = false;
             button1.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     buttonReplayLevelActionPerformed(evt);
@@ -72,7 +78,6 @@ public class FrameGameEnd extends JFrame {
         centerP.add(messageSpace, JLabel.CENTER);
 
         centerP.add(messageScore, JLabel.CENTER);
-        // centerP.add(messageSpace, JLabel.CENTER);
         centerP.add(new JLabel("***********************************     Fin du niveau     ***********************************"), JLabel.CENTER);
 
         southP.add(button1);
@@ -81,7 +86,7 @@ public class FrameGameEnd extends JFrame {
         this.add(new JLabel("    "), BorderLayout.WEST);
         this.add(centerP, BorderLayout.CENTER);
         this.add(southP, BorderLayout.SOUTH);
-        
+
         this.setLocationRelativeTo(null);
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -89,29 +94,34 @@ public class FrameGameEnd extends JFrame {
             ) {
                 Game.FG.endGameFrame.dispose();
                 Game.FG.frameGame.dispose();
+                if(writeScore){
+                    Game.SM.writeScore();
+                }
             }
         }
         );
         this.show();
     }
-    
+
     private void buttonNextLevelActionPerformed(java.awt.event.ActionEvent evt) {
         Game.FG.endGameFrame.dispose();
         Game.FG.frameGame.dispose();
         Game.GM.launchLevel(Game.GM.getCurrentGameLevel() + 1);
-        
+
     }
-    
+
     private void buttonReplayLevelActionPerformed(java.awt.event.ActionEvent evt) {
         Game.FG.endGameFrame.dispose();
         Game.FG.frameGame.dispose();
         Game.GM.launchLevel(Game.GM.getCurrentGameLevel());
-        
+
     }
-    
+
     private void buttonStopGameActionPerformed(java.awt.event.ActionEvent evt) {
-       Game.FG.endGameFrame.dispose();
-       Game.FG.frameGame.dispose();
-                
+        Game.FG.endGameFrame.dispose();
+        Game.FG.frameGame.dispose();
+        if(writeScore){
+                    Game.SM.writeScore();
+                }
     }
 }

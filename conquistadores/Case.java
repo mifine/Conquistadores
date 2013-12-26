@@ -159,7 +159,6 @@ public class Case extends JPanel implements MouseListener {
                  * it
                  */ else if (!this.isSelected && this.canBeSelected && this.nbCasesSelected < 2) {
                     this.isSelected = true;
-//                    this.setBackground(Color.LIGHT_GRAY);
                     this.clanColor = this.initialBrightClanColor;
                     for (int i = 0; i < Game.BOARD_SIZE; i++) {
                         for (int j = 0; j < Game.BOARD_SIZE; j++) {
@@ -184,12 +183,10 @@ public class Case extends JPanel implements MouseListener {
         if (this.isHuman) {
             // no case is selected yet : the player can select any of his cases
             if (this.nbCasesSelected == 0 && this.clan == Game.GM.gameMecanics.getWhoIsPlayingInt()) {
-//                this.setBackground(Color.LIGHT_GRAY);
                 this.clanColor = this.initialBrightClanColor;
                 this.canBeSelected = true;
             } // one case is already selected, can be selected only if the neighbour case has been selected
             else if (this.nbCasesSelected == 1 && this.canBeSelected) {
-//                this.setBackground(Color.LIGHT_GRAY);
                 this.clanColor = this.initialBrightClanColor;
                 if (!this.isSelected) {
                     boolean neighbour = false;
